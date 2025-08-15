@@ -18,7 +18,6 @@ const NavBar = () => {
   const [notifications, setNotifications] = useState([]);
   const [hasNewNotification, setHasNewNotification] = useState(false);
 
-  // 🔹 New state for points
   const [points, setPoints] = useState(0);
 
   const notificationRef = useRef(null);
@@ -26,7 +25,6 @@ const NavBar = () => {
   const notificationMenuRef = useRef(null);
   const profileMenuRef = useRef(null);
 
-  // Define the base URL for your backend API using the environment variable
   const BACKEND_API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
@@ -56,14 +54,11 @@ const NavBar = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [notificationDropdownOpen, profileDropdownOpen]);
 
-  // 🔹 Fetch notifications
   const fetchNotifications = async () => {
     try {
       const userEmail = localStorage.getItem("userEmail");
       if (!userEmail) return;
 
-      // *** IMPORTANT CHANGE HERE ***
-      // Changed from "http://localhost:5000" to use the environment variable
       const res = await fetch(`${BACKEND_API_BASE_URL}/api/notifications?email=${userEmail}`);
       const data = await res.json();
       setNotifications(data);
@@ -75,14 +70,11 @@ const NavBar = () => {
     }
   };
 
-  // 🔹 Fetch points
   const fetchPoints = async () => {
     try {
       const userEmail = localStorage.getItem("userEmail");
       if (!userEmail) return;
 
-      // *** IMPORTANT CHANGE HERE ***
-      // Changed from "http://localhost:5000" to use the environment variable
       const res = await fetch(`${BACKEND_API_BASE_URL}/api/user-points?email=${userEmail}`);
       const data = await res.json();
       setPoints(data.points || 0);
@@ -90,8 +82,7 @@ const NavBar = () => {
       console.error("Error fetching points:", err);
     }
   };
-
-  // 🔹 Poll for new notifications & points
+  
   useEffect(() => {
     fetchNotifications();
     fetchPoints();
@@ -190,7 +181,6 @@ const NavBar = () => {
             )}
           </div>
 
-          {/* 🔹 Points display */}
           <div
             style={{
               display: "flex",
@@ -335,3 +325,4 @@ const NavBar = () => {
 };
 
 export default NavBar;
+
