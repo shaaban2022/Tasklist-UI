@@ -9,7 +9,6 @@ const ResetPasswordForm = () => {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
 
-  // Define the base URL for your backend API using the environment variable
   const BACKEND_API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
   const handleSendOtp = async (e) => {
@@ -18,7 +17,6 @@ const ResetPasswordForm = () => {
     setMessage("");
 
     try {
-      // *** IMPORTANT CHANGE HERE ***
       const res = await fetch(`${BACKEND_API_BASE_URL}/api/auth/send-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -43,7 +41,6 @@ const ResetPasswordForm = () => {
     setMessage("");
 
     try {
-      // *** IMPORTANT CHANGE HERE ***
       const res = await fetch(`${BACKEND_API_BASE_URL}/api/auth/reset-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -157,3 +154,4 @@ const ResetPasswordForm = () => {
 };
 
 export default ResetPasswordForm;
+
