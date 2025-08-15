@@ -134,7 +134,6 @@
   }
 }
 
-/* Filters container */
 .filters {
   display: flex;
   flex-wrap: wrap;
@@ -142,7 +141,6 @@
   margin-bottom: 15px;
 }
 
-/* Filter dropdowns styled like buttons */
 .filters select {
   padding: 8px 14px;
   border-radius: 8px;
@@ -156,21 +154,18 @@
   min-width: 180px;
 }
 
-/* Hover effect */
 .filters select:hover {
   background: linear-gradient(135deg, #ffffff, #f5f5f5);
   border-color: #888;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
-/* Focus effect */
 .filters select:focus {
   outline: none;
   border-color: #4a90e2;
   box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.25);
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
   .filters {
     flex-direction: column;
@@ -183,15 +178,13 @@
   }
 }
 
-/* Optional: subtle animation on change */
 .filters select:active {
   transform: scale(0.98);
 }
 
 
-/* Delete Button Styles */
 .delete-btn {
-  background-color: #ff4d4f; /* vibrant red */
+  background-color: #ff4d4f; 
   color: #fff;
   border: none;
   padding: 6px 14px;
@@ -204,7 +197,7 @@
 }
 
 .delete-btn:hover {
-  background-color: #d9363e; /* darker red on hover */
+  background-color: #d9363e;
   transform: scale(1.05);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
@@ -222,7 +215,6 @@
 }
 
 
-/* Download Dropdown */
 .download-dropdown {
   display: flex;
   align-items: center;
@@ -278,3 +270,4 @@
 .email-btn:active {
   background-color: #174d70;
 }
+
