@@ -9,13 +9,11 @@ const AddTaskPage = () => {
 
   const currentUser = JSON.parse(localStorage.getItem("user"));
 
-  // Define the base URL for your backend API using the environment variable
   const BACKEND_API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
   const fetchUserTasks = async () => {
     if (!currentUser) return;
     try {
-      // *** IMPORTANT CHANGE HERE (1 of 2) ***
       const res = await fetch(`${BACKEND_API_BASE_URL}/api/user-tasks?assignee_email=${currentUser.email}`);
       const data = await res.json();
       if (res.ok) {
@@ -26,7 +24,7 @@ const AddTaskPage = () => {
           start: t.assigned_date,
           end: t.due_date,
           status: t.status,
-          assignee: 'https://via.placeholder.com/32', // This is a placeholder, not a backend call
+          assignee: 'https://via.placeholder.com/32',
         }));
         setTasks(formattedTasks);
       } else {
@@ -57,7 +55,6 @@ const AddTaskPage = () => {
     };
 
     try {
-      // *** IMPORTANT CHANGE HERE (2 of 2) ***
       const res = await fetch(`${BACKEND_API_BASE_URL}/api/tasks`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -68,7 +65,7 @@ const AddTaskPage = () => {
       if (res.ok) {
         alert(data.message);
         closePopup();
-        fetchUserTasks(); // Refresh the tasks list
+        fetchUserTasks(); 
       } else {
         alert(data.message);
       }
@@ -78,7 +75,6 @@ const AddTaskPage = () => {
     }
   };
 
-  // Group tasks by assigned date
   const tasksByDate = tasks.reduce((acc, task) => {
     const dateKey = new Date(task.start).toLocaleDateString();
     if (!acc[dateKey]) acc[dateKey] = [];
@@ -140,3 +136,4 @@ const AddTaskPage = () => {
 };
 
 export default AddTaskPage;
+
