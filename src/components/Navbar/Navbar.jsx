@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import ReactDOM from 'react-dom';
 import { FaBell } from 'react-icons/fa';
 import logo from '../../assets/tasklistlogo.svg';
-import './NavBar.css';
+import './Navbar.css';
 import ProfilePic from "../../assets/profile.png";
 
 const NavBar = () => {
@@ -326,3 +326,4 @@ const NavBar = () => {
 };
 
 export default NavBar;
+
