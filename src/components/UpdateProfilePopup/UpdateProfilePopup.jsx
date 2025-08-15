@@ -7,7 +7,6 @@ const UpdateProfilePopup = ({ user, onClose, onUpdate }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Define the base URL for your backend API using the environment variable
   const BACKEND_API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
   const handleSubmit = async (e) => {
@@ -18,7 +17,6 @@ const UpdateProfilePopup = ({ user, onClose, onUpdate }) => {
     try {
       const token = localStorage.getItem("authToken");
 
-      // *** IMPORTANT CHANGE HERE ***
       const res = await fetch(`${BACKEND_API_BASE_URL}/api/user/update-profile`, {
         method: "PUT",
         headers: {
@@ -92,3 +90,4 @@ const UpdateProfilePopup = ({ user, onClose, onUpdate }) => {
 };
 
 export default UpdateProfilePopup;
+
