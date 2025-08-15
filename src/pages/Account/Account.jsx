@@ -15,7 +15,6 @@ const Account = () => {
   const [deleting, setDeleting] = useState(false);
   const [error, setError] = useState("");
 
-  // Define the base URL for your backend API using the environment variable
   const BACKEND_API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
   const handleLogout = () => {
@@ -40,7 +39,6 @@ const Account = () => {
     setError("");
     setDeleting(true);
     try {
-      // *** IMPORTANT CHANGE HERE ***
       const res = await fetch(`${BACKEND_API_BASE_URL}/api/user/delete-account`, {
         method: "DELETE",
         headers: {
@@ -135,3 +133,4 @@ const Account = () => {
 };
 
 export default Account;
+
