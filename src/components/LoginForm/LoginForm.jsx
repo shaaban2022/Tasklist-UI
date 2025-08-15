@@ -12,7 +12,9 @@ const LoginForm = ({ onLoginSuccess }) => {
       setError('');
 
       try {
-        const res = await fetch('http://localhost:5000/api/auth/login', {
+        // *** IMPORTANT CHANGE HERE ***
+        // Replaced hardcoded localhost URL with an environment variable for deployment.
+        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/auth/login`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password }),
