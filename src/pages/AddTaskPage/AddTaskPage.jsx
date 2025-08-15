@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import SideNavbar from '../../components/SideNavbar/SideNavbar';
 import AddTaskPopup from '../../components/AddTaskPopup/AddTaskPopup';
-import './AddTaskPage.css'; 
+import './AddTaskPage.css';
 
 const AddTaskPage = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -9,10 +9,14 @@ const AddTaskPage = () => {
 
   const currentUser = JSON.parse(localStorage.getItem("user"));
 
+  // Define the base URL for your backend API using the environment variable
+  const BACKEND_API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
+
   const fetchUserTasks = async () => {
     if (!currentUser) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/user-tasks?assignee_email=${currentUser.email}`);
+      // *** IMPORTANT CHANGE HERE (1 of 2) ***
+      const res = await fetch(`${BACKEND_API_BASE_URL}/api/user-tasks?assignee_email=${currentUser.email}`);
       const data = await res.json();
       if (res.ok) {
         const formattedTasks = data.map((t) => ({
@@ -22,7 +26,7 @@ const AddTaskPage = () => {
           start: t.assigned_date,
           end: t.due_date,
           status: t.status,
-          assignee: 'https://via.placeholder.com/32',
+          assignee: 'https://via.placeholder.com/32', // This is a placeholder, not a backend call
         }));
         setTasks(formattedTasks);
       } else {
@@ -53,7 +57,8 @@ const AddTaskPage = () => {
     };
 
     try {
-      const res = await fetch("http://localhost:5000/api/tasks", {
+      // *** IMPORTANT CHANGE HERE (2 of 2) ***
+      const res = await fetch(`${BACKEND_API_BASE_URL}/api/tasks`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newTask)
