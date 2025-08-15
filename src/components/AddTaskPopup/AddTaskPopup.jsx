@@ -30,7 +30,9 @@ const AddTaskPopup = ({ isOpen, onClose, onAddTask }) => {
     };
 
     try {
-      const res = await fetch("http://localhost:5000/api/tasks", {
+      // *** IMPORTANT CHANGE HERE ***
+      // Replaced hardcoded localhost URL with an environment variable for deployment.
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/tasks`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newTask)
