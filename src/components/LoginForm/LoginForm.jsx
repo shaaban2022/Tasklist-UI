@@ -12,8 +12,6 @@ const LoginForm = ({ onLoginSuccess }) => {
       setError('');
 
       try {
-        // *** IMPORTANT CHANGE HERE ***
-        // Replaced hardcoded localhost URL with an environment variable for deployment.
         const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/auth/login`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -114,3 +112,4 @@ const LoginForm = ({ onLoginSuccess }) => {
 };
 
 export default LoginForm;
+
