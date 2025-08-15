@@ -6,19 +6,17 @@ import { Document, Packer, Paragraph, Table, TableRow, TableCell, WidthType } fr
 import { saveAs } from "file-saver";
 
 import jsPDF from "jspdf";
-import "jspdf-autotable"; // attaches autoTable to jsPDF prototype
+import "jspdf-autotable"; 
 
 
 const TasksTable = ({ showAssignee = true }) => {
   const [tasks, setTasks] = useState([]);
   const [filteredTasks, setFilteredTasks] = useState([]);
 
-  // Filters
   const [statusFilter, setStatusFilter] = useState("");
   const [dueDateSort, setDueDateSort] = useState("");
   const [priorityFilter, setPriorityFilter] = useState("");
 
-  // Define the base URL for your backend API using the environment variable
   const BACKEND_API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
@@ -26,7 +24,6 @@ const TasksTable = ({ showAssignee = true }) => {
       try {
         const userEmail = localStorage.getItem("userEmail");
 
-        // *** IMPORTANT CHANGE HERE (1 of 3) ***
         const assignedRes = await fetch(
           `${BACKEND_API_BASE_URL}/api/assigned-tasks?assigned_to_email=${userEmail}`
         );
@@ -36,7 +33,6 @@ const TasksTable = ({ showAssignee = true }) => {
           source: "assigned_tasks",
         }));
 
-        // *** IMPORTANT CHANGE HERE (2 of 3) ***
         const ownRes = await fetch(
           `${BACKEND_API_BASE_URL}/api/user-tasks?assignee_email=${userEmail}`
         );
@@ -60,7 +56,6 @@ const TasksTable = ({ showAssignee = true }) => {
     fetchTasks();
   }, []);
 
-  // Handle filters
   useEffect(() => {
     let tempTasks = [...tasks];
 
@@ -87,7 +82,6 @@ const TasksTable = ({ showAssignee = true }) => {
 
   const handleStatusChange = async (taskId, newStatus, source) => {
     try {
-      // *** IMPORTANT CHANGE HERE (3 of 3) ***
       const endpoint =
         source === "tasks"
           ? `${BACKEND_API_BASE_URL}/api/tasks/${taskId}/status`
@@ -111,7 +105,6 @@ const TasksTable = ({ showAssignee = true }) => {
 
   const handleDeleteTask = async (taskId, source) => {
     try {
-      // *** IMPORTANT CHANGE HERE (1 of 2 for handleDeleteTask) ***
       const endpoint =
         source === "tasks"
           ? `${BACKEND_API_BASE_URL}/api/tasks/${taskId}`
@@ -167,7 +160,6 @@ const TasksTable = ({ showAssignee = true }) => {
     }
 
     try {
-      // *** IMPORTANT CHANGE HERE (2 of 2 for sendTasksToEmail) ***
       const res = await fetch(`${BACKEND_API_BASE_URL}/api/send-tasks-email`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -183,8 +175,6 @@ const TasksTable = ({ showAssignee = true }) => {
   };
 
 
-
-  // Download Word
   const downloadWord = async () => {
     const tableRows = [
       new TableRow({
@@ -228,8 +218,6 @@ const TasksTable = ({ showAssignee = true }) => {
 
   return (
     <div className="tasks-table">
-      {/* Download Dropdown */}
-      {/* Download Dropdown */}
       <div className="download-dropdown">
         <label htmlFor="download-select">Download All Tasks:</label>
         <select
@@ -237,7 +225,7 @@ const TasksTable = ({ showAssignee = true }) => {
           onChange={(e) => {
             if (e.target.value === "pdf") downloadPDF();
             if (e.target.value === "word") downloadWord();
-            e.target.value = ""; // Reset dropdown after download
+            e.target.value = ""; 
           }}
         >
           <option value="">Select format</option>
@@ -245,14 +233,12 @@ const TasksTable = ({ showAssignee = true }) => {
           <option value="word">Word</option>
         </select>
 
-        {/* 📧 Email button */}
         <button className="email-btn" onClick={sendTasksToEmail}>
           📧 Send to Email
         </button>
       </div>
 
 
-      {/* Filter buttons */}
       <div className="filters">
         <select onChange={(e) => setStatusFilter(e.target.value)} value={statusFilter}>
           <option value="">All Statuses</option>
@@ -337,3 +323,4 @@ const TasksTable = ({ showAssignee = true }) => {
 };
 
 export default TasksTable;
+
