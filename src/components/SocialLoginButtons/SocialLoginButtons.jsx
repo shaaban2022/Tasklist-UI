@@ -1,4 +1,4 @@
-import googleIcon from "../../assets/googleicon.png";   // adjust path if necessary
+import googleIcon from "../../assets/googleicon.png";   
 import microsoftIcon from "../../assets/microsoftpng.png";
 
 
@@ -29,3 +29,4 @@ const SocialLoginButtons = () => {
 };
 
 export default SocialLoginButtons;
+
