@@ -26,6 +26,9 @@ const NavBar = () => {
   const notificationMenuRef = useRef(null);
   const profileMenuRef = useRef(null);
 
+  // Define the base URL for your backend API using the environment variable
+  const BACKEND_API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
+
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (
@@ -58,7 +61,10 @@ const NavBar = () => {
     try {
       const userEmail = localStorage.getItem("userEmail");
       if (!userEmail) return;
-      const res = await fetch(`http://localhost:5000/api/notifications?email=${userEmail}`);
+
+      // *** IMPORTANT CHANGE HERE ***
+      // Changed from "http://localhost:5000" to use the environment variable
+      const res = await fetch(`${BACKEND_API_BASE_URL}/api/notifications?email=${userEmail}`);
       const data = await res.json();
       setNotifications(data);
 
@@ -74,7 +80,10 @@ const NavBar = () => {
     try {
       const userEmail = localStorage.getItem("userEmail");
       if (!userEmail) return;
-      const res = await fetch(`http://localhost:5000/api/user-points?email=${userEmail}`);
+
+      // *** IMPORTANT CHANGE HERE ***
+      // Changed from "http://localhost:5000" to use the environment variable
+      const res = await fetch(`${BACKEND_API_BASE_URL}/api/user-points?email=${userEmail}`);
       const data = await res.json();
       setPoints(data.points || 0);
     } catch (err) {
@@ -326,4 +335,3 @@ const NavBar = () => {
 };
 
 export default NavBar;
-
