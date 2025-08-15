@@ -39,57 +39,65 @@ const Tasks = () => {
 
   const userEmail = localStorage.getItem("userEmail");
 
+  // Define the base URL for your backend API using the environment variable
+  const BACKEND_API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
+
   useEffect(() => {
-  const fetchTasks = async () => {
-    try {
-      const userEmail = localStorage.getItem("userEmail");
+    const fetchTasks = async () => {
+      try {
+        const userEmail = localStorage.getItem("userEmail");
 
-      const assignedRes = await fetch(
-        `http://localhost:5000/api/assigned-tasks?assigned_to_email=${userEmail}`
-      );
-      let assignedData = await assignedRes.json();
-      assignedData = assignedData.map((task) => ({
-        id: task.sr_no,
-        title: task.task,
-        start: new Date(task.assigned_date),
-        end: new Date(task.due_date),
-        status: task.status,
-        priority: task.priority,
-        assigneeName: task.assignee_name,
-        source: "assigned_tasks",
-      }));
+        // *** IMPORTANT CHANGE HERE (1 of 3) ***
+        const assignedRes = await fetch(
+          `${BACKEND_API_BASE_URL}/api/assigned-tasks?assigned_to_email=${userEmail}`
+        );
+        let assignedData = await assignedRes.json();
+        assignedData = assignedData.map((task) => ({
+          id: task.sr_no,
+          title: task.task,
+          start: new Date(task.assigned_date),
+          end: new Date(task.due_date),
+          status: task.status,
+          priority: task.priority,
+          assigneeName: task.assignee_name,
+          source: "assigned_tasks",
+        }));
 
-      const userRes = await fetch(
-        `http://localhost:5000/api/user-tasks?assignee_email=${userEmail}`
-      );
-      let userData = await userRes.json();
-      userData = userData.map((task) => ({
-        id: task.sr_no,
-        title: task.task,
-        start: new Date(task.assigned_date || task.due_date), 
-        end: new Date(task.due_date),
-        status: task.status,
-        priority: task.priority,
-        assigneeName: "Me",
-        source: "tasks",
-      }));
+        // *** IMPORTANT CHANGE HERE (2 of 3) ***
+        const userRes = await fetch(
+          `${BACKEND_API_BASE_URL}/api/user-tasks?assignee_email=${userEmail}`
+        );
+        let userData = await userRes.json();
+        userData = userData.map((task) => ({
+          id: task.sr_no,
+          title: task.task,
+          start: new Date(task.assigned_date || task.due_date),
+          end: new Date(task.due_date),
+          status: task.status,
+          priority: task.priority,
+          assigneeName: "Me",
+          source: "tasks",
+        }));
 
-      const combinedTasks = [...assignedData, ...userData];
+        const combinedTasks = [...assignedData, ...userData];
 
-      setTasks(combinedTasks);
-    } catch (err) {
-      console.error("Error fetching tasks:", err);
+        setTasks(combinedTasks);
+      } catch (err) {
+        console.error("Error fetching tasks:", err);
+      }
+    };
+
+    if (userEmail) {
+      fetchTasks();
     }
-  };
-
-  if (userEmail) {
-    fetchTasks();
-  }
-}, []);
+  }, [userEmail]); // Add userEmail to dependency array to re-fetch if it changes
 
   const handleStatusChange = async (id, newStatus) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/assigned-tasks/${id}/status`, {
+      // *** IMPORTANT CHANGE HERE (3 of 3) ***
+      // This endpoint seems to be specifically for assigned tasks,
+      // if it needs to update 'tasks' table as well, you'd need to extend logic based on 'source'
+      const res = await fetch(`${BACKEND_API_BASE_URL}/api/assigned-tasks/${id}/status`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: newStatus })
@@ -135,16 +143,22 @@ const Tasks = () => {
   };
 
   const handleAddTask = (newTask) => {
+    // This function adds to local state.
+    // The actual API call is handled by AddTaskPopup component directly.
     const formattedTask = {
-      id: tasks.length + 1,
+      id: tasks.length + 1, // This ID might conflict with backend IDs if not carefully managed
       title: newTask.title,
       start: new Date(newTask.date),
       end: new Date(newTask.date),
       status: "Not Started",
       priority: newTask.priority,
-      assigneeName: "You" 
+      assigneeName: "You"
     };
     setTasks((prev) => [...prev, formattedTask]);
+    // After adding, you might want to refetch tasks from backend to get the actual ID
+    // or ensure AddTaskPopup's onAddTask callback also triggers a full fetch.
+    // Given AddTaskPopup handles its own fetch and alerts, this local state update
+    // might be temporary until the next full refresh.
   };
 
   return (
