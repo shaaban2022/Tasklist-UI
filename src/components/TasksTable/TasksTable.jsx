@@ -18,13 +18,17 @@ const TasksTable = ({ showAssignee = true }) => {
   const [dueDateSort, setDueDateSort] = useState("");
   const [priorityFilter, setPriorityFilter] = useState("");
 
+  // Define the base URL for your backend API using the environment variable
+  const BACKEND_API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
+
   useEffect(() => {
     const fetchTasks = async () => {
       try {
         const userEmail = localStorage.getItem("userEmail");
 
+        // *** IMPORTANT CHANGE HERE (1 of 3) ***
         const assignedRes = await fetch(
-          `http://localhost:5000/api/assigned-tasks?assigned_to_email=${userEmail}`
+          `${BACKEND_API_BASE_URL}/api/assigned-tasks?assigned_to_email=${userEmail}`
         );
         let assignedData = await assignedRes.json();
         assignedData = assignedData.map((t) => ({
@@ -32,8 +36,9 @@ const TasksTable = ({ showAssignee = true }) => {
           source: "assigned_tasks",
         }));
 
+        // *** IMPORTANT CHANGE HERE (2 of 3) ***
         const ownRes = await fetch(
-          `http://localhost:5000/api/user-tasks?assignee_email=${userEmail}`
+          `${BACKEND_API_BASE_URL}/api/user-tasks?assignee_email=${userEmail}`
         );
         let ownData = await ownRes.json();
         ownData = ownData.map((t) => ({
@@ -82,10 +87,11 @@ const TasksTable = ({ showAssignee = true }) => {
 
   const handleStatusChange = async (taskId, newStatus, source) => {
     try {
+      // *** IMPORTANT CHANGE HERE (3 of 3) ***
       const endpoint =
         source === "tasks"
-          ? `http://localhost:5000/api/tasks/${taskId}/status`
-          : `http://localhost:5000/api/assigned-tasks/${taskId}/status`;
+          ? `${BACKEND_API_BASE_URL}/api/tasks/${taskId}/status`
+          : `${BACKEND_API_BASE_URL}/api/assigned-tasks/${taskId}/status`;
 
       await fetch(endpoint, {
         method: "PUT",
@@ -105,10 +111,11 @@ const TasksTable = ({ showAssignee = true }) => {
 
   const handleDeleteTask = async (taskId, source) => {
     try {
+      // *** IMPORTANT CHANGE HERE (1 of 2 for handleDeleteTask) ***
       const endpoint =
         source === "tasks"
-          ? `http://localhost:5000/api/tasks/${taskId}`
-          : `http://localhost:5000/api/assigned-tasks/${taskId}`;
+          ? `${BACKEND_API_BASE_URL}/api/tasks/${taskId}`
+          : `${BACKEND_API_BASE_URL}/api/assigned-tasks/${taskId}`;
 
       await fetch(endpoint, {
         method: "DELETE",
@@ -160,7 +167,8 @@ const TasksTable = ({ showAssignee = true }) => {
     }
 
     try {
-      const res = await fetch("http://localhost:5000/api/send-tasks-email", {
+      // *** IMPORTANT CHANGE HERE (2 of 2 for sendTasksToEmail) ***
+      const res = await fetch(`${BACKEND_API_BASE_URL}/api/send-tasks-email`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userEmail })
