@@ -2,12 +2,15 @@ import { useState } from "react";
 import "./ResetPasswordForm.css";
 
 const ResetPasswordForm = () => {
-  const [step, setStep] = useState(1); 
+  const [step, setStep] = useState(1);
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
+
+  // Define the base URL for your backend API using the environment variable
+  const BACKEND_API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
   const handleSendOtp = async (e) => {
     e.preventDefault();
@@ -15,7 +18,8 @@ const ResetPasswordForm = () => {
     setMessage("");
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/send-otp", {
+      // *** IMPORTANT CHANGE HERE ***
+      const res = await fetch(`${BACKEND_API_BASE_URL}/api/auth/send-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
@@ -39,7 +43,8 @@ const ResetPasswordForm = () => {
     setMessage("");
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/reset-password", {
+      // *** IMPORTANT CHANGE HERE ***
+      const res = await fetch(`${BACKEND_API_BASE_URL}/api/auth/reset-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, otp, newPassword }),
