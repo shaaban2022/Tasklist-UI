@@ -39,7 +39,6 @@ const Tasks = () => {
 
   const userEmail = localStorage.getItem("userEmail");
 
-  // Define the base URL for your backend API using the environment variable
   const BACKEND_API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
@@ -47,7 +46,6 @@ const Tasks = () => {
       try {
         const userEmail = localStorage.getItem("userEmail");
 
-        // *** IMPORTANT CHANGE HERE (1 of 3) ***
         const assignedRes = await fetch(
           `${BACKEND_API_BASE_URL}/api/assigned-tasks?assigned_to_email=${userEmail}`
         );
@@ -63,7 +61,6 @@ const Tasks = () => {
           source: "assigned_tasks",
         }));
 
-        // *** IMPORTANT CHANGE HERE (2 of 3) ***
         const userRes = await fetch(
           `${BACKEND_API_BASE_URL}/api/user-tasks?assignee_email=${userEmail}`
         );
@@ -90,13 +87,10 @@ const Tasks = () => {
     if (userEmail) {
       fetchTasks();
     }
-  }, [userEmail]); // Add userEmail to dependency array to re-fetch if it changes
+  }, [userEmail]); 
 
   const handleStatusChange = async (id, newStatus) => {
     try {
-      // *** IMPORTANT CHANGE HERE (3 of 3) ***
-      // This endpoint seems to be specifically for assigned tasks,
-      // if it needs to update 'tasks' table as well, you'd need to extend logic based on 'source'
       const res = await fetch(`${BACKEND_API_BASE_URL}/api/assigned-tasks/${id}/status`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -143,10 +137,8 @@ const Tasks = () => {
   };
 
   const handleAddTask = (newTask) => {
-    // This function adds to local state.
-    // The actual API call is handled by AddTaskPopup component directly.
     const formattedTask = {
-      id: tasks.length + 1, // This ID might conflict with backend IDs if not carefully managed
+      id: tasks.length + 1, 
       title: newTask.title,
       start: new Date(newTask.date),
       end: new Date(newTask.date),
@@ -155,10 +147,6 @@ const Tasks = () => {
       assigneeName: "You"
     };
     setTasks((prev) => [...prev, formattedTask]);
-    // After adding, you might want to refetch tasks from backend to get the actual ID
-    // or ensure AddTaskPopup's onAddTask callback also triggers a full fetch.
-    // Given AddTaskPopup handles its own fetch and alerts, this local state update
-    // might be temporary until the next full refresh.
   };
 
   return (
@@ -238,3 +226,4 @@ const Tasks = () => {
 };
 
 export default Tasks;
+
