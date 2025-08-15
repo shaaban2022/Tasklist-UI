@@ -16,6 +16,9 @@ const SignupForm = () => {
 
   const [errors, setErrors] = useState({});
 
+  // Define the base URL for your backend API using the environment variable
+  const BACKEND_API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
+
   const validate = () => {
     const newErrors = {};
 
@@ -52,7 +55,8 @@ const SignupForm = () => {
 
     if (Object.keys(formErrors).length === 0) {
       try {
-        const res = await fetch("http://localhost:5000/api/auth/signup", {
+        // *** IMPORTANT CHANGE HERE ***
+        const res = await fetch(`${BACKEND_API_BASE_URL}/api/auth/signup`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(form),
@@ -183,7 +187,7 @@ const SignupForm = () => {
 
         <div className="text-center mt-4">
           <p className="text-sm text-gray-600">
-            Already have an account? 
+            Already have an account?
             <a
               href="/login"
               className="login-option"
