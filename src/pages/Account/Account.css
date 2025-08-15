@@ -1,0 +1,253 @@
+/* Base layout */
+.account-layout {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: row;
+}
+
+.account-page {
+  flex: 1;
+  padding: 20px;
+  background-color: #f5f7fa;
+}
+
+.account-header {
+  margin-bottom: 20px;
+}
+
+.account-details {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-section {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.profile-picture {
+  border-radius: 50%;
+  margin-right: 20px;
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+}
+
+.profile-info h3 {
+  margin: 0 0 5px 0;
+  font-size: 20px;
+}
+
+.profile-info p {
+  margin: 2px 0;
+  font-size: 14px;
+  color: #555;
+}
+
+.account-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.update-btn,
+.logout-btn,
+.delete-account-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.update-btn {
+  background-color: #4caf50;
+  color: white;
+}
+
+.logout-btn {
+  background-color: #f44336;
+  color: white;
+}
+
+.delete-account-btn {
+  background-color: #e53e3e;
+  color: white;
+  font-weight: 600;
+}
+
+.delete-account-btn:hover:not(:disabled) {
+  background-color: #c53030;
+}
+
+.delete-account-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Popup overlay */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 10px;
+}
+
+.popup-content {
+  background: #fff;
+  border-radius: 12px;
+  padding: 30px 40px;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+  text-align: center;
+}
+
+.popup-content h3 {
+  margin-bottom: 15px;
+  color: #e53e3e;
+  font-size: 20px;
+}
+
+.popup-content p {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 25px;
+}
+
+.popup-content button {
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.popup-content button:first-child {
+  background-color: #e53e3e;
+  color: white;
+  margin-right: 10px;
+}
+
+.popup-content button:first-child:hover:not(:disabled) {
+  background-color: #c53030;
+}
+
+.popup-content button:last-child {
+  background-color: #e2e8f0;
+  color: #333;
+}
+
+.popup-content button:last-child:hover:not(:disabled) {
+  background-color: #cbd5e1;
+}
+
+.popup-content button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Responsive adjustments */
+
+/* Tablets / Medium screens */
+/* Center profile picture for medium screens */
+@media (max-width: 1024px) {
+  .profile-section {
+    flex-direction: column;
+    align-items: center; /* center horizontally */
+    text-align: center;  /* center text */
+  }
+
+  .profile-picture {
+    margin-bottom: 15px;
+    margin-right: 0;
+  }
+
+  .profile-info h3,
+  .profile-info p {
+    text-align: center;
+  }
+
+  .account-actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .update-btn,
+  .logout-btn,
+  .delete-account-btn {
+    width: 100%;
+  }
+}
+
+/* Mobile / Small screens */
+/* Sidebar overlay for small screens */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    left: -220px; /* hidden by default */
+    top: 0;
+    height: 100%;
+    z-index: 1000;
+    transition: left 0.3s ease;
+  }
+
+  .sidebar.open {
+    left: 0; /* show sidebar when open */
+  }
+
+  .account-page {
+    margin-left: 0;
+    transition: margin-left 0.3s ease;
+  }
+
+  /* Optional: dim background when sidebar open */
+  .sidebar-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 900;
+    display: none;
+  }
+
+  .sidebar-backdrop.active {
+    display: block;
+  }
+}
+
+/* Extra small / very small screens */
+@media (max-width: 480px) {
+  .profile-picture {
+    width: 80px;
+    height: 80px;
+  }
+
+  .popup-content {
+    padding: 15px;
+  }
+
+  .popup-content h3 {
+    font-size: 16px;
+  }
+
+  .popup-content p {
+    font-size: 13px;
+  }
+}

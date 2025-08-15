@@ -1,0 +1,127 @@
+body {
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.support-container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+  background: linear-gradient(to bottom right, #f7f9fc, #eef2ff);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.support-container:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.08);
+}
+
+.support-container h1 {
+  font-size: 2rem;
+  margin-bottom: 16px;
+  color: #1f2937;
+  text-align: center;
+}
+
+.support-container p {
+  font-size: 1.1rem;
+  margin-bottom: 24px;
+  text-align: center;
+  color: #4b5563;
+}
+
+.support-section {
+  margin-bottom: 32px;
+  padding: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.support-section:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
+}
+
+.support-section h2 {
+  font-size: 1.3rem;
+  margin-bottom: 10px;
+  color: #4338ca;
+}
+
+.support-section ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.support-section li {
+  margin-bottom: 8px;
+  font-size: 1rem;
+  color: #374151;
+  transition: color 0.2s ease;
+}
+
+.support-section li:hover {
+  color: #111827;
+}
+
+.support-section a {
+  color: #4f46e5;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.support-section a:hover {
+  color: #4338ca;
+  text-decoration: underline;
+}
+
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.faq-item {
+  padding: 10px;
+  background-color: #f3f4f6;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.faq-item:hover {
+  background-color: #e5e7eb;
+  transform: translateX(3px);
+}
+
+.faq-question {
+  font-weight: 500;
+}
+
+.faq-answer {
+  margin-top: 8px;
+  font-size: 0.95rem;
+  color: #4b5563;
+}
+
+.faq-item.open {
+  background-color: #e0e7ff;
+}
+
+@media (max-width: 768px) {
+  .support-container {
+    margin: 20px;
+    padding: 15px;
+  }
+
+  .support-container h1 {
+    font-size: 1.5rem;
+  }
+
+  .support-section {
+    padding: 15px;
+  }
+}
