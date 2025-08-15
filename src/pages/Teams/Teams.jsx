@@ -10,7 +10,6 @@ const Teams = () => {
   const [members, setMembers] = useState([]);
   const [assignedTasks, setAssignedTasks] = useState([]);
 
-  // Define the base URL for your backend API using the environment variable
   const BACKEND_API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
   const fetchAssignedTasks = async () => {
@@ -18,7 +17,6 @@ const Teams = () => {
     if (!user?.email) return;
 
     try {
-      // *** IMPORTANT CHANGE HERE (1 of 5) ***
       const res = await fetch(
         `${BACKEND_API_BASE_URL}/api/tasks-assigned-by-me?assignee_email=${encodeURIComponent(
           user.email
@@ -32,16 +30,15 @@ const Teams = () => {
   };
 
   useEffect(() => {
-    fetchMembers(); // This call is also inside its own useEffect below, can be consolidated.
+    fetchMembers();
     fetchAssignedTasks();
-  }, []); // Run once on mount
+  }, []);
 
   const fetchMembers = async () => {
     try {
       const user = JSON.parse(localStorage.getItem("user"));
       if (!user?.email) return;
 
-      // *** IMPORTANT CHANGE HERE (2 of 5) ***
       const res = await fetch(
         `${BACKEND_API_BASE_URL}/api/team-members?inviterEmail=${encodeURIComponent(
           user.email
@@ -57,14 +54,13 @@ const Teams = () => {
 
   useEffect(() => {
     fetchMembers();
-  }, []); // Run once on mount
+  }, []); 
 
   const handlePriorityChange = async (taskId, newPriority) => {
     try {
       const user = JSON.parse(localStorage.getItem("user"));
       const currentUserEmail = user?.email;
 
-      // *** IMPORTANT CHANGE HERE (3 of 5) ***
       const res = await fetch(`${BACKEND_API_BASE_URL}/api/assigned-tasks/${taskId}/priority`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -99,7 +95,6 @@ const Teams = () => {
     const inviterEmail = localStorage.getItem("userEmail");
 
     try {
-      // *** IMPORTANT CHANGE HERE (4 of 5) ***
       const res = await fetch(`${BACKEND_API_BASE_URL}/api/invite-member`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -110,9 +105,7 @@ const Teams = () => {
       alert(data.message);
       setEmail("");
 
-      // Send notification to the invitee
       if (res.ok) {
-        // *** IMPORTANT CHANGE HERE (5 of 5) ***
         await fetch(`${BACKEND_API_BASE_URL}/api/team-invite/notify-request`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -143,7 +136,6 @@ const Teams = () => {
         assigned_to_email: taskData.assignedToEmail,
       };
 
-      // *** IMPORTANT CHANGE HERE (API call for AssignTaskPopup's onAssign prop) ***
       const res = await fetch(`${BACKEND_API_BASE_URL}/assign-task`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -155,7 +147,7 @@ const Teams = () => {
       if (res.ok) {
         alert("Task assigned successfully!");
         setIsModalOpen(false);
-        fetchAssignedTasks(); // Refresh assigned tasks after successful assignment
+        fetchAssignedTasks();
       } else {
         alert(data.message || "Failed to assign task");
       }
@@ -232,7 +224,6 @@ const Teams = () => {
           </div>
         </section>
 
-        {/* ✅ Moved Assigned Tasks section here */}
         <section>
           <h2 className="section-title">Tasks Assigned by Me</h2>
           <div className="table-container">
@@ -313,3 +304,4 @@ const Teams = () => {
 };
 
 export default Teams;
+
