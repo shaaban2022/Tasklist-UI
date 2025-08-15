@@ -5,7 +5,7 @@ import "./SideNavbar.css";
 
 const SideNavbar = () => {
   const location = useLocation();
-  const [isOpen, setIsOpen] = useState(true); // sidebar open state
+  const [isOpen, setIsOpen] = useState(true);
 
   const isActive = (path) => location.pathname === path;
 
@@ -63,3 +63,4 @@ const SideNavbar = () => {
 };
 
 export default SideNavbar;
+
