@@ -15,6 +15,9 @@ const Account = () => {
   const [deleting, setDeleting] = useState(false);
   const [error, setError] = useState("");
 
+  // Define the base URL for your backend API using the environment variable
+  const BACKEND_API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
+
   const handleLogout = () => {
     localStorage.removeItem("authToken");
     localStorage.removeItem("user");
@@ -37,7 +40,8 @@ const Account = () => {
     setError("");
     setDeleting(true);
     try {
-      const res = await fetch("http://localhost:5000/api/user/delete-account", {
+      // *** IMPORTANT CHANGE HERE ***
+      const res = await fetch(`${BACKEND_API_BASE_URL}/api/user/delete-account`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
