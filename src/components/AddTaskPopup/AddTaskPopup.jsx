@@ -30,8 +30,6 @@ const AddTaskPopup = ({ isOpen, onClose, onAddTask }) => {
     };
 
     try {
-      // *** IMPORTANT CHANGE HERE ***
-      // Replaced hardcoded localhost URL with an environment variable for deployment.
       const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/tasks`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -102,3 +100,4 @@ const AddTaskPopup = ({ isOpen, onClose, onAddTask }) => {
 };
 
 export default AddTaskPopup;
+
