@@ -10,13 +10,17 @@ const Teams = () => {
   const [members, setMembers] = useState([]);
   const [assignedTasks, setAssignedTasks] = useState([]);
 
+  // Define the base URL for your backend API using the environment variable
+  const BACKEND_API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
+
   const fetchAssignedTasks = async () => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (!user?.email) return;
 
     try {
+      // *** IMPORTANT CHANGE HERE (1 of 5) ***
       const res = await fetch(
-        `http://localhost:5000/api/tasks-assigned-by-me?assignee_email=${encodeURIComponent(
+        `${BACKEND_API_BASE_URL}/api/tasks-assigned-by-me?assignee_email=${encodeURIComponent(
           user.email
         )}`
       );
@@ -28,17 +32,18 @@ const Teams = () => {
   };
 
   useEffect(() => {
-    fetchMembers();
+    fetchMembers(); // This call is also inside its own useEffect below, can be consolidated.
     fetchAssignedTasks();
-  }, []);
+  }, []); // Run once on mount
 
   const fetchMembers = async () => {
     try {
       const user = JSON.parse(localStorage.getItem("user"));
       if (!user?.email) return;
 
+      // *** IMPORTANT CHANGE HERE (2 of 5) ***
       const res = await fetch(
-        `http://localhost:5000/api/team-members?inviterEmail=${encodeURIComponent(
+        `${BACKEND_API_BASE_URL}/api/team-members?inviterEmail=${encodeURIComponent(
           user.email
         )}`
       );
@@ -52,38 +57,39 @@ const Teams = () => {
 
   useEffect(() => {
     fetchMembers();
-  }, []);
+  }, []); // Run once on mount
 
   const handlePriorityChange = async (taskId, newPriority) => {
-  try {
-    const user = JSON.parse(localStorage.getItem("user"));
-    const currentUserEmail = user?.email;
+    try {
+      const user = JSON.parse(localStorage.getItem("user"));
+      const currentUserEmail = user?.email;
 
-    const res = await fetch(`http://localhost:5000/api/assigned-tasks/${taskId}/priority`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        priority: newPriority,
-        currentUserEmail: currentUserEmail  // ✅ match backend key
-      }),
-    });
+      // *** IMPORTANT CHANGE HERE (3 of 5) ***
+      const res = await fetch(`${BACKEND_API_BASE_URL}/api/assigned-tasks/${taskId}/priority`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          priority: newPriority,
+          currentUserEmail: currentUserEmail
+        }),
+      });
 
 
-    if (res.ok) {
-      setAssignedTasks((prevTasks) =>
-        prevTasks.map((t) =>
-          t.sr_no === taskId ? { ...t, priority: newPriority } : t
-        )
-      );
-    } else {
-      const data = await res.json();
-      alert(data.message || "Failed to update priority");
+      if (res.ok) {
+        setAssignedTasks((prevTasks) =>
+          prevTasks.map((t) =>
+            t.sr_no === taskId ? { ...t, priority: newPriority } : t
+          )
+        );
+      } else {
+        const data = await res.json();
+        alert(data.message || "Failed to update priority");
+      }
+    } catch (err) {
+      console.error("Error updating priority:", err);
+      alert("Error updating priority");
     }
-  } catch (err) {
-    console.error("Error updating priority:", err);
-    alert("Error updating priority");
-  }
-};
+  };
 
 
 
@@ -93,7 +99,8 @@ const Teams = () => {
     const inviterEmail = localStorage.getItem("userEmail");
 
     try {
-      const res = await fetch("http://localhost:5000/api/invite-member", {
+      // *** IMPORTANT CHANGE HERE (4 of 5) ***
+      const res = await fetch(`${BACKEND_API_BASE_URL}/api/invite-member`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, inviter_id: inviterEmail }),
@@ -105,7 +112,8 @@ const Teams = () => {
 
       // Send notification to the invitee
       if (res.ok) {
-        await fetch("http://localhost:5000/api/team-invite/notify-request", {
+        // *** IMPORTANT CHANGE HERE (5 of 5) ***
+        await fetch(`${BACKEND_API_BASE_URL}/api/team-invite/notify-request`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -135,7 +143,8 @@ const Teams = () => {
         assigned_to_email: taskData.assignedToEmail,
       };
 
-      const res = await fetch("http://localhost:5000/assign-task", {
+      // *** IMPORTANT CHANGE HERE (API call for AssignTaskPopup's onAssign prop) ***
+      const res = await fetch(`${BACKEND_API_BASE_URL}/assign-task`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -146,6 +155,7 @@ const Teams = () => {
       if (res.ok) {
         alert("Task assigned successfully!");
         setIsModalOpen(false);
+        fetchAssignedTasks(); // Refresh assigned tasks after successful assignment
       } else {
         alert(data.message || "Failed to assign task");
       }
