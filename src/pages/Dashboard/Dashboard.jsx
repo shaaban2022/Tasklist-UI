@@ -10,14 +10,10 @@ const Dashboard = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const userEmail = localStorage.getItem("userEmail");
 
-  // Define the base URL for your backend API using the environment variable
   const BACKEND_API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
-  // Function to fetch tasks from the backend
   const fetchTasksFromBackend = async () => {
     if (!userEmail) {
-      // If no user email, return an empty array or handle as needed
-      // (This likely means the user is not logged in, and should be redirected or shown no data)
       setTasks([]);
       return;
     }
@@ -53,15 +49,13 @@ const Dashboard = () => {
       setTasks(combinedTasks);
     } catch (error) {
       console.error("Error fetching tasks from backend:", error);
-      // In a deployed app, you might want to show a user-friendly error message
-      // or set tasks to an empty array rather than using db.initialTasks mock data.
-      setTasks([]); // Fallback to empty if API fails
+      setTasks([]);
     }
   };
 
   useEffect(() => {
     fetchTasksFromBackend();
-  }, [userEmail]); // Re-fetch if userEmail changes
+  }, [userEmail]); 
 
   const handleStatusChange = async (id, newStatus, source = "tasks") => {
     try {
@@ -86,7 +80,6 @@ const Dashboard = () => {
         throw new Error(errorData.message || "Failed to update task status");
       }
 
-      // Optimistically update UI
       setTasks(prev =>
         prev.map(task =>
           task.id === id ? { ...task, status: newStatus } : task
@@ -94,7 +87,6 @@ const Dashboard = () => {
       );
     } catch (error) {
       console.error("Error updating status:", error);
-      // Revert UI change or show error message
     }
   };
 
@@ -123,15 +115,10 @@ const Dashboard = () => {
     };
 
     try {
-      // This fetch is handled by AddTaskPopup, but if Dashboard also needed to add,
-      // it would use BACKEND_API_BASE_URL here too.
-      // (The AddTaskPopup component itself has already been updated for this.)
-      // For now, this handleAddTask just formats and adds to local state which is then refreshed by fetchUserTasks
-      await fetchTasksFromBackend(); // Re-fetch tasks after AddTaskPopup potentially adds one
-      setIsPopupOpen(false); // Close popup after successful add
+      await fetchTasksFromBackend(); 
+      setIsPopupOpen(false); 
     } catch (err) {
       console.error("Error adding task:", err);
-      // Error handling already in AddTaskPopup, but can add more here if direct fetch
     }
   };
 
@@ -155,11 +142,6 @@ const Dashboard = () => {
 
         <div className="table-section">
           <h1>Task Details</h1>
-          {/* Note: The TasksTable component itself also needs the VITE_BACKEND_URL update if not done yet.
-              You are passing 'tasks' prop here, but TasksTable also fetches its own.
-              Consider if TasksTable should receive tasks as a prop OR fetch itself.
-              If it fetches itself, you might not need to pass 'tasks' here.
-          */}
           <TasksTable tasks={tasks} showAssignee={false} onStatusChange={handleStatusChange} />
         </div>
       </div>
@@ -167,10 +149,11 @@ const Dashboard = () => {
       <AddTaskPopup
         isOpen={isPopupOpen}
         onClose={() => setIsPopupOpen(false)}
-        onAddTask={handleAddTask} // This prop receives data from popup, but actual API call is inside popup's handleSubmit
+        onAddTask={handleAddTask} 
       />
     </div>
   );
 };
 
 export default Dashboard;
+
