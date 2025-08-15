@@ -1,11 +1,14 @@
 import { useState } from "react";
-import "./UpdateProfilePopup.css"; 
+import "./UpdateProfilePopup.css";
 
 const UpdateProfilePopup = ({ user, onClose, onUpdate }) => {
   const [fullName, setFullName] = useState(user.fullName || "");
   const [mobile, setMobile] = useState(user.mobile || "");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  // Define the base URL for your backend API using the environment variable
+  const BACKEND_API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -15,7 +18,8 @@ const UpdateProfilePopup = ({ user, onClose, onUpdate }) => {
     try {
       const token = localStorage.getItem("authToken");
 
-      const res = await fetch("http://localhost:5000/api/user/update-profile", {
+      // *** IMPORTANT CHANGE HERE ***
+      const res = await fetch(`${BACKEND_API_BASE_URL}/api/user/update-profile`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -47,7 +51,7 @@ const UpdateProfilePopup = ({ user, onClose, onUpdate }) => {
     <div className="modal-overlay" onClick={onClose}>
       <div
         className="modal-content"
-        onClick={(e) => e.stopPropagation()} 
+        onClick={(e) => e.stopPropagation()}
       >
         <h3>Update Profile</h3>
         <form onSubmit={handleSubmit} className="update-profile-form">
