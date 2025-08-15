@@ -1,5 +1,5 @@
 import express from "express";
-import mysql from "mysql2/promise"; // Keep mysql2/promise for direct queries if needed, but primarily use pool
+import mysql from "mysql2/promise"; 
 import cors from "cors";
 import bcrypt from "bcrypt";
 import nodemailer from "nodemailer";
@@ -825,4 +825,5 @@ app.get("/", (req, res) => res.json({ ok: true }));
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
+
 });
