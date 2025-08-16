@@ -7,7 +7,6 @@ import { useState, useEffect } from 'react';
 import { Calendar as BigCalendar, momentLocalizer, Views, Navigate } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-
 const localizer = momentLocalizer(moment);
 
 const CustomToolbar = ({ label, onNavigate, onView, onDayStep }) => {
@@ -36,19 +35,22 @@ const Tasks = () => {
   const [calendarView, setCalendarView] = useState(Views.MONTH);
   const [tasks, setTasks] = useState([]);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-
   const userEmail = localStorage.getItem("userEmail");
-
   const BACKEND_API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
     const fetchTasks = async () => {
       try {
         const userEmail = localStorage.getItem("userEmail");
+        if (!userEmail) {
+          console.warn("User email not found in localStorage.");
+          return;
+        }
 
         const assignedRes = await fetch(
           `${BACKEND_API_BASE_URL}/api/assigned-tasks?assigned_to_email=${userEmail}`
         );
+        if (!assignedRes.ok) throw new Error(`HTTP error! status: ${assignedRes.status}`);
         let assignedData = await assignedRes.json();
         assignedData = assignedData.map((task) => ({
           id: task.sr_no,
@@ -64,34 +66,35 @@ const Tasks = () => {
         const userRes = await fetch(
           `${BACKEND_API_BASE_URL}/api/user-tasks?assignee_email=${userEmail}`
         );
+        if (!userRes.ok) throw new Error(`HTTP error! status: ${userRes.status}`);
         let userData = await userRes.json();
         userData = userData.map((task) => ({
           id: task.sr_no,
           title: task.task,
-          start: new Date(task.assigned_date || task.due_date),
+          start: new Date(task.assigned_date || task.due_date),  
           end: new Date(task.due_date),
           status: task.status,
           priority: task.priority,
           assigneeName: "Me",
           source: "tasks",
         }));
-
         const combinedTasks = [...assignedData, ...userData];
-
         setTasks(combinedTasks);
       } catch (err) {
         console.error("Error fetching tasks:", err);
       }
     };
-
     if (userEmail) {
       fetchTasks();
     }
-  }, [userEmail]); 
+  }, [userEmail, BACKEND_API_BASE_URL]);  
 
-  const handleStatusChange = async (id, newStatus) => {
+  const handleStatusChange = async (id, newStatus, source) => {  
     try {
-      const res = await fetch(`${BACKEND_API_BASE_URL}/api/assigned-tasks/${id}/status`, {
+      const endpoint = source === "assigned_tasks"
+        ? `${BACKEND_API_BASE_URL}/api/assigned-tasks/${id}/status`
+        : `${BACKEND_API_BASE_URL}/api/tasks/${id}/status`;
+      const res = await fetch(endpoint, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: newStatus })
@@ -100,11 +103,11 @@ const Tasks = () => {
       if (res.ok) {
         setTasks(prev =>
           prev.map(task =>
-            task.id === id ? { ...task, status: newStatus } : task
+            task.id === id && task.source === source ? { ...task, status: newStatus } : task
           )
         );
       } else {
-        console.error("Failed to update status");
+        console.error("Failed to update status for task:", id, await res.text());
       }
     } catch (err) {
       console.error("Error updating task status:", err);
@@ -112,46 +115,44 @@ const Tasks = () => {
   };
 
   const handleNavigate = (action) => {
-    let newDate = new Date(calendarDate);
-
+    let newDate = moment(calendarDate);  
     if (action === Navigate.TODAY) {
-      newDate = new Date();
+      newDate = moment();
     } else if (action === Navigate.NEXT) {
-      if (calendarView === Views.MONTH) newDate.setMonth(newDate.getMonth() + 1);
-      else if (calendarView === Views.WEEK) newDate.setDate(newDate.getDate() + 7);
-      else if (calendarView === Views.DAY) newDate.setDate(newDate.getDate() + 1);
+      if (calendarView === Views.MONTH) newDate.add(1, 'month');
+      else if (calendarView === Views.WEEK) newDate.add(1, 'week');
+      else if (calendarView === Views.DAY) newDate.add(1, 'day');
     } else if (action === Navigate.PREVIOUS) {
-      if (calendarView === Views.MONTH) newDate.setMonth(newDate.getMonth() - 1);
-      else if (calendarView === Views.WEEK) newDate.setDate(newDate.getDate() - 7);
-      else if (calendarView === Views.DAY) newDate.setDate(newDate.getDate() - 1);
+      if (calendarView === Views.MONTH) newDate.subtract(1, 'month');
+      else if (calendarView === Views.WEEK) newDate.subtract(1, 'week');
+      else if (calendarView === Views.DAY) newDate.subtract(1, 'day');
     }
-
-    setCalendarDate(newDate);
+    setCalendarDate(newDate.toDate());  
   };
 
   const handleDayStep = (step) => {
-    const newDate = new Date(calendarDate);
-    newDate.setDate(newDate.getDate() + step);
-    setCalendarDate(newDate);
+    const newDate = moment(calendarDate).add(step, 'day');  
+    setCalendarDate(newDate.toDate());
     setCalendarView(Views.DAY);
   };
 
   const handleAddTask = (newTask) => {
     const formattedTask = {
-      id: tasks.length + 1, 
-      title: newTask.title,
-      start: new Date(newTask.date),
-      end: new Date(newTask.date),
-      status: "Not Started",
+      id: Math.random(),  
+      title: newTask.task,
+      start: new Date(newTask.due_date),  
+      end: new Date(newTask.due_date),
+      status: "Pending",  
       priority: newTask.priority,
-      assigneeName: "You"
+      assigneeName: "Me",  
+      source: "tasks"  
     };
     setTasks((prev) => [...prev, formattedTask]);
   };
 
   return (
     <div className="tasks-page">
-      <SideNavbar />
+      <SideNavbar />  
       <div className="tasks-content">
         <div className="tasks-header">
           <h2>Tasks</h2>
@@ -178,14 +179,14 @@ const Tasks = () => {
             <h3>My Tasks</h3>
             <TasksTable
               tasks={tasks}
-              onStatusChange={handleStatusChange}
+              onStatusChange={handleStatusChange}  
               showAssignee={true}
             />
           </div>
         )}
 
         {activeTab === "calendar" && (
-          <div style={{ height: "600px" }}>
+          <div className="calendar-container">  
             <BigCalendar
               localizer={localizer}
               events={tasks}
@@ -196,7 +197,7 @@ const Tasks = () => {
               onNavigate={setCalendarDate}
               onView={setCalendarView}
               style={{ height: "100%" }}
-              views={["month", "week", "day"]}
+              views={["month", "week", "day", "agenda"]}
               defaultView="month"
               components={{
                 toolbar: (props) => (
@@ -219,6 +220,8 @@ const Tasks = () => {
           isOpen={isPopupOpen}
           onClose={() => setIsPopupOpen(false)}
           onAddTask={handleAddTask}
+          userEmail={userEmail}
+          backendBaseUrl={BACKEND_API_BASE_URL}
         />
       </div>
     </div>
@@ -226,4 +229,3 @@ const Tasks = () => {
 };
 
 export default Tasks;
-
