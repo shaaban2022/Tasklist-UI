@@ -194,15 +194,15 @@ This project is configured for deployment on [Render](https://render.com/).
       * **Build Command:** `npm install`
       * **Start Command:** `npm start`
       * **Environment Variables:** Add the following **Render environment variables**:
-          * `MYSQL_ADDON_DB`: `bugoisvx8bzrtxk2hjqb`
-          * `MYSQL_ADDON_HOST`: `bugoisvx8bzrtxk2hjqb-mysql.services.clever-cloud.com`
-          * `MYSQL_ADDON_PASSWORD`: `J2TWKhIA261cZowXdUhG`
-          * `MYSQL_ADDON_PORT`: `3306`
-          * `MYSQL_ADDON_USER`: `u2z6aolmen3sc0ns`
-          * `MYSQL_ADDON_URI`: `mysql://u2z6aolmen3sc0ns:J2TWKhIA261cZowXdUhG@bugoisvx8bzrtxk2hjqb-mysql.services.clever-cloud.com:3306/bugoisvx8bzrtxk2hjqb`
+          * `MYSQL_ADDON_DB`: `YOUR_MYSQL_ADDON_DB`
+          * `MYSQL_ADDON_HOST`: `YOUR_MYSQL_ADDON_HOST`
+          * `MYSQL_ADDON_PASSWORD`: `YOUR_MYSQL_ADDON_PASSWORD`
+          * `MYSQL_ADDON_PORT`: `YOUR_MYSQL_ADDON_PORT`
+          * `MYSQL_ADDON_USER`: `YOUR_MYSQL_ADDON_USER`
+          * `MYSQL_ADDON_URI`: `YOUR_MYSQL_ADDON_URI`
           * `JWT_SECRET`: (A strong, unique secret key for production)
-          * `EMAIL_USER`: (Your Gmail email, same as `.env`)
-          * `EMAIL_PASS`: (Your Gmail App Password, same as `.env`)
+          * `EMAIL_USER`: (Your Gmail email)
+          * `EMAIL_PASS`: (Your Gmail App Password)
           * `NODE_ENV`: `production`
           * `FRONTEND_URL`: (Will be added *after* frontend deployment, e.g., `https://tasklist-frontend-p2pl.onrender.com`)
           * `BACKEND_URL`: `https://tasklist-backend-api.onrender.com` (Your backend's public URL once deployed)
