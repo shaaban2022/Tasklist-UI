@@ -12,6 +12,8 @@ import Support from './pages/Support/Support';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import AddTaskPage from './pages/AddTaskPage/AddTaskPage';
 import ResetPassword from './pages/ResetPassword/ResetPassword';
+import UserManualLayout from './pages/UserManualLayout/UserManualLayout';  
+
 function App() {
   const location = useLocation();
   const path = location.pathname.toLowerCase();
@@ -22,7 +24,7 @@ function App() {
     path === '/' ||
     path === '/features' ||
     path === '/support' ||
-    path == '/resetpassword';
+    path === '/resetpassword';
 
   return (
     <div>
@@ -79,6 +81,14 @@ function App() {
           element={
             <ProtectedRoute>
               <AddTaskPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/user-manual"
+          element={
+            <ProtectedRoute>
+              <UserManualLayout />
             </ProtectedRoute>
           }
         />
