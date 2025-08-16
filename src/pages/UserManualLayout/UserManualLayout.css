@@ -1,0 +1,37 @@
+.user-manual-page-layout {
+  display: flex; 
+  min-height: 100vh; 
+  width: 100%; 
+  overflow: hidden;
+  background-color: #f7f9fc; 
+}
+
+.user-manual-main-content {
+  flex: 1; 
+  display: flex; 
+  flex-direction: column;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+@media (max-width: 1024px) {
+  .user-manual-main-content {
+    padding: 30px 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .user-manual-page-layout {
+    flex-direction: column; 
+  }
+
+  .user-manual-main-content {
+    padding: 15px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .user-manual-main-content {
+    padding: 10px 15px;
+  }
+}
