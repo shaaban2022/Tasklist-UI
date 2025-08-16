@@ -824,6 +824,33 @@ app.get("/api/user-points", async (req, res) => {
 });
 
 
+app.post('/api/send-support-email', async (req, res) => {
+    const { name, email, message } = req.body;
+    if (!name || !email || !message) {
+        return res.status(400).json({ message: 'All fields are required.' });
+    }
+    try {
+        const mailOptions = {
+            from: process.env.EMAIL_USER, 
+            to: process.env.EMAIL_USER, 
+            subject: `New Support Form Request from Tasklist UI: ${name}`, 
+            html: `
+                <p><strong>Name:</strong> ${name}</p>
+                <p><strong>Email:</strong> ${email}</p>
+                <p><strong>Message:</strong></p>
+                <p>${message}</p>
+            `, 
+        };
+        await transporter.sendMail(mailOptions); 
+        res.status(200).json({ message: 'Support message sent successfully!' });
+    } catch (error) {
+        console.error('Error sending support email:', error);
+        res.status(500).json({ message: 'Failed to send support message. Please try again later.' });
+    }
+});
+
+
+
 app.get("/", (req, res) => res.json({ ok: true }));
 
 const PORT = process.env.PORT || 5000;
@@ -831,4 +858,5 @@ app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 
 });
+
 
