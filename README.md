@@ -56,33 +56,55 @@ The project is divided into a frontend (UI) and a backend (API) service.
 
 ```
 .
-├── backend/                  # Node.js Express API
+├── server/                   # Node.js Express API
 │   ├── db.js                 # Database connection pool setup
-│   ├── server.js             # Main Express application, API routes
-│   ├── package.json
-│   └── package-lock.json
-├── frontend/                 # React Vite UI
-│   ├── public/
-│   ├── src/
-│   │   ├── assets/           # Images, logos
-│   │   ├── components/       # Reusable UI components (e.g., LoginForm, SideNavbar, AddTaskPopup)
-│   │   │   ├── AddTaskPopup/AddTaskPopup.jsx
-│   │   │   ├── LoginForm/LoginForm.jsx
-│   │   │   ├── Navbar/Navbar.jsx
-│   │   │   └── ... (other components)
-│   │   ├── pages/            # Page-level components (e.g., Dashboard, Tasks, Account)
-│   │   │   ├── Dashboard/Dashboard.jsx
-│   │   │   ├── Tasks/Tasks.jsx
-│   │   │   ├── Teams/Teams.jsx
-│   │   │   └── ... (other pages)
-│   │   ├── App.jsx           # Main application router
-│   │   ├── index.css
-│   │   └── main.jsx          # Entry point for React app
-│   ├── index.html            # Main HTML file
-│   ├── package.json
 │   ├── package-lock.json
-│   └── vite.config.js        # Vite build configuration
-└── README.md
+│   ├── package.json
+│   └── server.js             # Main Express application, API routes
+├── src/                      # React Vite UI (Frontend code)
+│   ├── App.jsx               # Main application router
+│   ├── assets/               # Images, logos
+│   │   ├── googleicon.png
+│   │   ├── microsoftpng.png
+│   │   ├── profile.png
+│   │   ├── tasklistlogo.svg
+│   │   ├── taskui.png
+│   │   └── workingdesk.png
+│   ├── components/           # Reusable UI components
+│   │   ├── AddTaskButton/
+│   │   ├── AddTaskPopup/
+│   │   ├── AssignTaskPopup/
+│   │   ├── LoginForm/
+│   │   ├── NavBarLogin/
+│   │   ├── Navbar/
+│   │   ├── ProtectedRoute/
+│   │   ├── ResetPasswordForm/
+│   │   ├── SideNavbar/
+│   │   ├── SignupForm/
+│   │   ├── SocialLoginButtons/
+│   │   ├── SupportForm/
+│   │   ├── TasksTable/
+│   │   └── UpdateProfilePopup/
+│   ├── index.css
+│   ├── main.jsx              # Entry point for React app rendering
+│   └── pages/                # Page-level components
+│       ├── Account/
+│       ├── AddTaskPage/
+│       ├── Calendar/
+│       ├── Dashboard/
+│       ├── Features/
+│       ├── Login/
+│       ├── ResetPassword/
+│       ├── Signup/
+│       ├── Support/
+│       ├── Tasks/
+│       └── Teams/
+├── .eslintrc.cjs             # ESLint configuration (renamed from eslint.config.js for common Node.js usage)
+├── index.html                # Main HTML file for frontend
+├── package-lock.json
+├── package.json
+├── tasklistdb_backup.sql     # Database dump file
+└── vite.config.js            # Vite build configuration for frontend
 ```
 
 -----
