@@ -12,7 +12,8 @@ import Support from './pages/Support/Support';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import AddTaskPage from './pages/AddTaskPage/AddTaskPage';
 import ResetPassword from './pages/ResetPassword/ResetPassword';
-import UserManualLayout from './pages/UserManualLayout/UserManualLayout';  
+import UserManualWrapper from './pages/UserManualLayout/UserManualLayout'; 
+import ScrollToTopButton from './components/ScrollToTopButton/ScrollToTopButton'; 
 
 function App() {
   const location = useLocation();
@@ -29,13 +30,14 @@ function App() {
   return (
     <div>
       {!isAuthPage && <Navbar />}
+
       <Routes>
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/features" element={<Features />} />
         <Route path="/support" element={<Support />} />
         <Route path="/resetpassword" element={<ResetPassword/>} />
-
+        <Route path="/" element={<Login />} /> 
         <Route
           path="/dashboard"
           element={
@@ -88,12 +90,13 @@ function App() {
           path="/user-manual"
           element={
             <ProtectedRoute>
-              <UserManualLayout />
+              <UserManualWrapper />
             </ProtectedRoute>
           }
         />
-        <Route path="/" element={<Login />} />
       </Routes>
+
+      <ScrollToTopButton />
     </div>
   );
 }
