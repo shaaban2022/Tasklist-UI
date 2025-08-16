@@ -31,11 +31,6 @@ const Calendar = () => {
       <div className="events-list">
         <h3>Scheduled Tasks & Events</h3>
         <ul>
-          <li>1 Aug 2025 - Project Proposal documentation 1</li>
-          <li>2 Aug 2025 - Project Proposal documentation 2nd version</li>
-          <li>3 Nov 2025 - Project Proposal documentation 3rd version</li>
-          <li>4 Nov 2025 - Project Proposal documentation 4th version</li>
-          <li>7 Nov 2025 - Task allotment</li>
         </ul>
       </div>
     </div>
