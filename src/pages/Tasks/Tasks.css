@@ -1,13 +1,16 @@
 .tasks-page {
-  display: flex;
+  display: flex; 
   min-height: 100vh;
   background-color: #f5f7fa;
   font-family: Arial, sans-serif;
 }
 
 .tasks-content {
-  flex: 1;
-  padding: 20px;
+  flex: 1; 
+  padding: 20px; 
+  width: 100%;  
+  box-sizing: border-box;    
+  transition: padding-left 0.3s ease;  
 }
 
 .tasks-header {
@@ -33,6 +36,7 @@
   font-weight: 500;
   font-size: 0.95rem;
   transition: background-color 0.2s ease;
+  white-space: nowrap;
 }
 
 .add-task-button:hover {
@@ -43,6 +47,7 @@
   display: flex;
   gap: 15px;
   margin-bottom: 20px;
+  flex-wrap: nowrap; 
 }
 
 .tab {
@@ -52,6 +57,7 @@
   color: #555;
   transition: all 0.2s ease;
   font-weight: 500;
+  white-space: nowrap;
 }
 
 .tab:hover {
@@ -63,13 +69,25 @@
   border-bottom-color: #1976d2;
 }
 
+.calendar-container {
+  height: 600px; 
+  margin-bottom: 20px;
+}
+
 .calendar-toolbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap; 
   gap: 10px;
+}
+
+.calendar-toolbar .nav-buttons,
+.calendar-toolbar .view-buttons {
+  display: flex;
+  gap: 5px;
+  flex-wrap: nowrap;  
 }
 
 .calendar-toolbar .nav-buttons button,
@@ -81,6 +99,8 @@
   border-radius: 4px;
   cursor: pointer;
   font-weight: 500;
+  font-size: 0.9rem;
+  white-space: nowrap;
   transition: background-color 0.2s ease;
 }
 
@@ -92,7 +112,39 @@
 .calendar-label {
   font-size: 1rem;
   font-weight: 500;
+  white-space: nowrap;
 }
+ 
+@media (max-width: 992px) {
+  .tasks-content {
+    padding: 15px;   
+  }
+  .tasks-header h2 {
+    font-size: 1.6rem;
+  }
+  .add-task-button {
+    padding: 8px 14px;
+    font-size: 0.9rem;
+  }
+  .tabs {
+    gap: 10px;
+  }
+  .tab {
+    padding: 7px 12px;
+    font-size: 0.9rem;
+  }
+  .calendar-container {
+    height: 500px;
+  }
+  .calendar-toolbar .nav-buttons button,
+  .calendar-toolbar .view-buttons button {
+    padding: 5px 8px;
+    font-size: 0.85rem;
+  }
+  .calendar-label {
+    font-size: 0.9rem;
+  }
+} 
 
 @media (max-width: 768px) {
   .tasks-header {
@@ -101,7 +153,86 @@
     gap: 10px;
   }
 
+  .tasks-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .add-task-button {
+    width: 100%;
+    text-align: center;
+  }
+
   .tabs {
-    flex-wrap: wrap;
+    flex-wrap: wrap;  
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 15px;
+  }
+
+  .tab {
+    font-size: 0.85rem;
+    padding: 6px 10px;
+  }
+
+  .calendar-container {
+    height: 400px;
+  }
+
+  .calendar-toolbar {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  .calendar-toolbar .nav-buttons,
+  .calendar-toolbar .view-buttons {
+    justify-content: center;
+    width: 100%;
+    gap: 8px;
+  }
+  .calendar-toolbar .nav-buttons button,
+  .calendar-toolbar .view-buttons button {
+    font-size: 0.8rem;
+    padding: 5px 8px;
+  }
+  .calendar-toolbar .calendar-label {
+    font-size: 0.95rem;
+  }
+}
+ 
+@media (max-width: 480px) {
+  .tasks-content {
+    padding-top: 45px;  
+    padding: 10px; 
+  }
+
+  .tasks-header h2 {
+    font-size: 1.3rem;
+  }
+
+  .add-task-button {
+    font-size: 0.8rem;
+    padding: 8px 12px;
+  }
+
+  .tabs {
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .tab {
+    font-size: 0.8rem;
+    padding: 5px 8px;
+  }
+
+  .calendar-container {
+    height: 350px;
+  }
+  .calendar-toolbar .nav-buttons button,
+  .calendar-toolbar .view-buttons button {
+    font-size: 0.75rem;
+    padding: 4px 6px;
+  }
+  .calendar-toolbar .calendar-label {
+    font-size: 0.85rem;
   }
 }
