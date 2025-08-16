@@ -346,11 +346,15 @@ app.post("/api/tasks", async (req, res) => {
     if (!task || !due_date || !priority || !assignee_name || !assignee_email) {
       return res.status(400).json({ message: "All fields are required" });
     }
+    
+    const nowUtc = new Date();
+      const assigned_date_ist = new Date(nowUtc.getTime() + (5.5 * 60 * 60 * 1000));
+      const formatted_assigned_date_ist = assigned_date_ist.toISOString().slice(0, 19).replace('T', ' ');
 
-    await query(
-      `INSERT INTO tasks (task, due_date, priority, assignee_name, assignee_email)
-       VALUES (?, ?, ?, ?, ?)`,
-      [task, due_date, priority, assignee_name, assignee_email]
+      await query(
+        `INSERT INTO tasks (task, assigned_date, due_date, priority, assignee_name, assignee_email)
+         VALUES (?, ?, ?, ?, ?, ?)`,
+        [task, formatted_assigned_date_ist, due_date, priority, assignee_name, assignee_email]
     );
 
     res.json({ message: "Task added successfully" });
@@ -827,3 +831,4 @@ app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 
 });
+
