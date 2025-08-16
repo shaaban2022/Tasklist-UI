@@ -1,5 +1,3 @@
-/* src/pages/UserManual/UserManual.css */
-
 .user-manual-layout {
     display: flex;
     min-height: 100vh;
@@ -10,8 +8,8 @@
     flex: 1;
     padding: 30px 40px;
     overflow-y: auto;
-    max-width: 1200px; /* Limit content width for readability */
-    margin: 0 auto; /* Center the content */
+    max-width: 1200px; 
+    margin: 0 auto; 
 }
 
 .manual-header {
@@ -45,7 +43,7 @@
 
 .manual-section h2 {
     font-size: 2.2rem;
-    color: #007bff; /* Blue for section titles */
+    color: #007bff; 
     margin-bottom: 25px;
     padding-bottom: 10px;
     border-bottom: 2px solid #e0e0e0;
@@ -86,7 +84,7 @@
     color: #555;
 }
 
-.manual-section ul ul { /* Nested lists */
+.manual-section ul ul { 
     list-style-type: circle;
     padding-left: 20px;
     margin-top: 5px;
@@ -106,7 +104,6 @@
     color: #c7254e;
 }
 
-/* Feature Grid Styling */
 .features-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -133,14 +130,14 @@
 .feature-icon {
     width: 50px;
     height: 50px;
-    background-color: #b3e5fc; /* Light blue */
+    background-color: #b3e5fc; 
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 1.8rem;
     margin: 0 auto 10px;
-    color: #0277bd; /* Darker blue icon color */
+    color: #0277bd;
 }
 
 .feature-title {
@@ -156,20 +153,19 @@
     line-height: 1.5;
 }
 
-/* FAQ Styling */
 .faq-list {
     margin-top: 20px;
 }
 
 .faq-item {
-    background-color: #f0f8ff; /* Light blue background for FAQ items */
+    background-color: #f0f8ff; 
     border: 1px solid #d0e0f0;
     border-radius: 8px;
     margin-bottom: 10px;
     padding: 15px 20px;
     cursor: pointer;
     transition: background-color 0.2s ease, box-shadow 0.2s ease;
-    overflow: hidden; /* For motion.div height animation */
+    overflow: hidden;
 }
 
 .faq-item:hover {
@@ -185,27 +181,26 @@
     gap: 10px;
 }
 
-.faq-question::before { /* Add a simple expand/collapse indicator */
-    content: '▶'; /* Right arrow */
+.faq-question::before { 
+    content: '▶'; 
     font-size: 0.8em;
     color: #007bff;
     transition: transform 0.2s ease;
 }
 
 .faq-item.open .faq-question::before {
-    content: '▼'; /* Down arrow */
-    transform: rotate(90deg); /* Rotate for open state */
+    content: '▼';
+    transform: rotate(90deg);
 }
 
 .faq-answer {
     margin-top: 10px;
-    padding-left: 30px; /* Indent answer */
+    padding-left: 30px;
     color: #666;
     font-size: 0.95rem;
     line-height: 1.5;
 }
 
-/* Horizontal Rule Styling */
 hr {
     border: none;
     border-top: 1px solid #e0e0e0;
@@ -221,7 +216,6 @@ hr {
     font-size: 0.9rem;
 }
 
-/* Responsive Adjustments */
 @media (max-width: 1024px) {
     .user-manual-content {
         padding: 20px 30px;
@@ -263,7 +257,7 @@ hr {
         font-size: 1.1rem;
     }
     .features-grid {
-        grid-template-columns: 1fr; /* Stack cards on small screens */
+        grid-template-columns: 1fr;
         gap: 15px;
     }
     .feature-card {
@@ -311,4 +305,5 @@ hr {
     .manual-footer {
         margin-top: 20px;
     }
+
 }
