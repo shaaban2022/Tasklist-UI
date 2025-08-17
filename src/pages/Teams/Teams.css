@@ -162,6 +162,49 @@ select:focus {
   color: #1b5e20;
   border-color: #388e3c;
 }
+
+.btn-delete-member {
+  background-color: #dc3545;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  white-space: nowrap;
+  font-size: 0.9rem;
+}
+
+.btn-delete-member:hover {
+  background-color: #c82333; 
+  transform: translateY(-1px); 
+}
+
+.btn-delete-member:active {
+  transform: translateY(0); 
+}
+
+.table-container th:last-child,
+.table-container td:last-child {
+    width: 80px; 
+    text-align: center; 
+}
+
+@media (max-width: 768px) {
+  .btn-delete-member {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+  }
+} 
+
+@media (max-width: 480px) {
+  .btn-delete-member {
+    padding: 5px 8px;
+    font-size: 0.75rem;
+  }
+}
+
 @media (max-width: 1024px) {
   .main-content {
     padding: 15px;
