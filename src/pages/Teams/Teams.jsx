@@ -51,10 +51,9 @@ const Teams = () => {
       console.error("Error fetching members:", err);
     }
   };
-
   useEffect(() => {
     fetchMembers();
-  }, []); 
+  }, []);
 
   const handlePriorityChange = async (taskId, newPriority) => {
     try {
@@ -69,7 +68,6 @@ const Teams = () => {
           currentUserEmail: currentUserEmail
         }),
       });
-
 
       if (res.ok) {
         setAssignedTasks((prevTasks) =>
@@ -86,8 +84,6 @@ const Teams = () => {
       alert("Error updating priority");
     }
   };
-
-
 
   const handleInvite = async () => {
     if (!email) return;
@@ -114,9 +110,11 @@ const Teams = () => {
             invitee_email: email,
           }),
         });
+        fetchMembers(); 
       }
     } catch (err) {
       console.error("Error sending invite:", err);
+      alert("Error sending invite."); 
     }
   };
 
@@ -147,13 +145,48 @@ const Teams = () => {
       if (res.ok) {
         alert("Task assigned successfully!");
         setIsModalOpen(false);
-        fetchAssignedTasks();
+        fetchAssignedTasks(); 
       } else {
         alert(data.message || "Failed to assign task");
       }
     } catch (error) {
       console.error("Error assigning task:", error);
       alert("Error assigning task");
+    }
+  };
+
+  const handleDeleteMember = async (memberEmail) => {
+    if (!window.confirm(`Are you sure you want to remove ${memberEmail} from your team?`)) {
+      return; 
+    }
+    const user = JSON.parse(localStorage.getItem("user"));
+    const inviterEmail = user?.email; 
+    if (!inviterEmail) {
+      alert("Your session has expired. Please log in again.");
+      return;
+    }
+
+    try {
+      const res = await fetch(`${BACKEND_API_BASE_URL}/api/team-members/${encodeURIComponent(memberEmail)}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ inviterEmail }), 
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert(data.message);
+        fetchMembers(); 
+        fetchAssignedTasks(); 
+      } else {
+        alert(data.message || "Failed to delete member.");
+      }
+    } catch (err) {
+      console.error("Error deleting member:", err);
+      alert("Server error while deleting member.");
     }
   };
 
@@ -190,6 +223,7 @@ const Teams = () => {
                   <th>Name</th>
                   <th>Email ID</th>
                   <th>Action</th>
+                  <th></th> 
                 </tr>
               </thead>
               <tbody>
@@ -210,11 +244,19 @@ const Teams = () => {
                           Assign task
                         </button>
                       </td>
+                      <td>
+                        <button
+                          className="btn-delete-member"
+                          onClick={() => handleDeleteMember(member.email)}
+                        >
+                          Delete
+                        </button>
+                      </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="4" style={{ textAlign: "center" }}>
+                    <td colSpan="5" style={{ textAlign: "center" }}> 
                       No team members found
                     </td>
                   </tr>
@@ -280,7 +322,7 @@ const Teams = () => {
                   })
                 ) : (
                   <tr>
-                    <td colSpan="5" style={{ textAlign: "center" }}>
+                    <td colSpan="6" style={{ textAlign: "center" }}> 
                       No tasks assigned by you yet
                     </td>
                   </tr>
@@ -289,7 +331,6 @@ const Teams = () => {
             </table>
           </div>
         </section>
-
       </div>
 
       {isModalOpen && (
@@ -304,4 +345,3 @@ const Teams = () => {
 };
 
 export default Teams;
-
