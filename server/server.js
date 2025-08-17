@@ -850,6 +850,33 @@ app.post('/api/send-support-email', async (req, res) => {
 });
 
 
+app.delete("/api/team-members/:email", async (req, res) => {
+    try {
+        const { email } = req.params; 
+        const inviterEmail = req.body.inviterEmail; 
+        if (!email || !inviterEmail) {
+            return res.status(400).json({ message: "Member email and inviter email are required." });
+        }
+        const [memberRows] = await pool.query(
+            "SELECT inviter_id FROM team_members WHERE email = ? AND inviter_id = ?",
+            [email, inviterEmail]
+        );
+        if (memberRows.length === 0) {
+            return res.status(403).json({ message: "Not authorized to delete this member or member not found under your team." });
+        }
+        await pool.query("DELETE FROM team_members WHERE email = ? AND inviter_id = ?", [email, inviterEmail]);
+        const notificationMessage = `You have been removed from the team by ${inviterEmail}.`;
+        await pool.query(
+            "INSERT INTO notifications (user_email, assignee_email, message) VALUES (?, ?, ?)",
+            [email, inviterEmail, notificationMessage]
+        );
+        res.json({ message: "Team member deleted successfully." });
+    } catch (err) {
+        console.error("Error deleting team member:", err);
+        res.status(500).json({ message: "Server error while deleting team member." });
+    }
+});
+
 
 app.get("/", (req, res) => res.json({ ok: true }));
 
@@ -858,5 +885,6 @@ app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 
 });
+
 
 
