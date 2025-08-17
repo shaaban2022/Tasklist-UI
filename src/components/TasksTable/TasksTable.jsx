@@ -6,7 +6,10 @@ import { Document, Packer, Paragraph, Table, TableRow, TableCell, WidthType } fr
 import { saveAs } from "file-saver";
 
 import jsPDF from "jspdf";
-import "jspdf-autotable"; 
+import "jspdf-autotable";
+
+import ShowEntries from '../ShowEntries/ShowEntries';
+import Pagination from '../Pagination/Pagination';
 
 
 const TasksTable = ({ showAssignee = true }) => {
@@ -16,6 +19,9 @@ const TasksTable = ({ showAssignee = true }) => {
   const [statusFilter, setStatusFilter] = useState("");
   const [dueDateSort, setDueDateSort] = useState("");
   const [priorityFilter, setPriorityFilter] = useState("");
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [entriesPerPage, setEntriesPerPage] = useState(10);
 
   const BACKEND_API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -48,6 +54,7 @@ const TasksTable = ({ showAssignee = true }) => {
 
         setTasks(combinedTasks);
         setFilteredTasks(combinedTasks);
+        setCurrentPage(1);
       } catch (err) {
         console.error("Error fetching tasks:", err);
       }
@@ -78,6 +85,7 @@ const TasksTable = ({ showAssignee = true }) => {
     }
 
     setFilteredTasks(tempTasks);
+    setCurrentPage(1); 
   }, [statusFilter, dueDateSort, priorityFilter, tasks]);
 
   const handleStatusChange = async (taskId, newStatus, source) => {
@@ -92,53 +100,66 @@ const TasksTable = ({ showAssignee = true }) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: newStatus }),
       });
-
       setTasks((prevTasks) =>
         prevTasks.map((task) =>
-          task.sr_no === taskId ? { ...task, status: newStatus } : task
+          task.sr_no === taskId && task.source === source ? { ...task, status: newStatus } : task
         )
       );
     } catch (err) {
       console.error("Error updating task status:", err);
+      alert("Failed to update task status."); 
     }
   };
 
   const handleDeleteTask = async (taskId, source) => {
+    if (!window.confirm("Are you sure you want to delete this task?")) {
+        return; 
+    }
     try {
       const endpoint =
         source === "tasks"
           ? `${BACKEND_API_BASE_URL}/api/tasks/${taskId}`
           : `${BACKEND_API_BASE_URL}/api/assigned-tasks/${taskId}`;
 
-      await fetch(endpoint, {
+      const res = await fetch(endpoint, {
         method: "DELETE",
       });
-
-      setTasks((prevTasks) =>
-        prevTasks.filter((task) => task.sr_no !== taskId)
-      );
+      if (res.ok) {
+          setTasks((prevTasks) =>
+              prevTasks.filter((task) => !(task.sr_no === taskId && task.source === source))
+          );
+          alert("Task deleted successfully.");
+      } else {
+          const errorData = await res.json();
+          alert(errorData.message || "Failed to delete task."); 
+      }
     } catch (err) {
       console.error("Error deleting task:", err);
+      alert("Server error while deleting task."); 
     }
   };
 
-
   const downloadPDF = () => {
-    if (!filteredTasks || filteredTasks.length === 0) return;
-
+    if (!filteredTasks || filteredTasks.length === 0) {
+      alert("No tasks to download.");
+      return;
+    }
     const doc = new jsPDF();
+    const columns = ["Sr.No.", "Task", "Assigned Date", "Due Date", "Status", "Priority"];
+    if (showAssignee) columns.push("Assignee");
 
-    const columns = ["Sr.No.", "Task", "Assigned Date", "Due Date", "Status", "Priority", "Assignee"];
-
-    const rows = filteredTasks.map((task, index) => [
-      index + 1,
-      task.task,
-      moment(task.assigned_date).format("YYYY-MM-DD"),
-      moment(task.due_date).format("YYYY-MM-DD"),
-      task.status,
-      task.priority,
-      task.assignee_name || "N/A"
-    ]);
+    const rows = filteredTasks.map((task, index) => {
+      const row = [
+        index + 1,
+        task.task,
+        moment(task.assigned_date).format("YYYY-MM-DD"),
+        moment(task.due_date).format("YYYY-MM-DD"),
+        task.status,
+        task.priority,
+      ];
+      if (showAssignee) row.push(task.assignee_name || "N/A");
+      return row;
+    });
 
     doc.autoTable({
       head: [columns],
@@ -176,6 +197,11 @@ const TasksTable = ({ showAssignee = true }) => {
 
 
   const downloadWord = async () => {
+    if (!filteredTasks || filteredTasks.length === 0) {
+      alert("No tasks to download.");
+      return;
+    }
+
     const tableRows = [
       new TableRow({
         children: [
@@ -204,6 +230,7 @@ const TasksTable = ({ showAssignee = true }) => {
     const doc = new Document({
       sections: [
         {
+          properties: {}, 
           children: [
             new Paragraph({ text: "All Tasks", heading: "Heading1" }),
             new Table({ rows: tableRows, width: { size: 100, type: WidthType.PERCENTAGE } })
@@ -216,111 +243,151 @@ const TasksTable = ({ showAssignee = true }) => {
     saveAs(blob, "Tasks.docx");
   };
 
+  const indexOfLastEntry = currentPage * entriesPerPage;
+  const indexOfFirstEntry = indexOfLastEntry - entriesPerPage;
+  const currentEntries = filteredTasks.slice(indexOfFirstEntry, indexOfLastEntry);
+
+  const totalPages = Math.ceil(filteredTasks.length / entriesPerPage);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const handleEntriesPerPageChange = (newEntriesPerPage) => {
+    setEntriesPerPage(newEntriesPerPage);
+    setCurrentPage(1);
+  };
+
+
   return (
-    <div className="tasks-table">
-      <div className="download-dropdown">
-        <label htmlFor="download-select">Download All Tasks:</label>
-        <select
-          id="download-select"
-          onChange={(e) => {
-            if (e.target.value === "pdf") downloadPDF();
-            if (e.target.value === "word") downloadWord();
-            e.target.value = ""; 
-          }}
-        >
-          <option value="">Select format</option>
-          <option value="pdf">PDF</option>
-          <option value="word">Word</option>
-        </select>
+    <div className="tasks-table-container"> 
+      <div className="table-controls-top"> 
+        <div className="download-options">
+          <div className="download-dropdown">
+            <label htmlFor="download-select">Download All Tasks:</label>
+            <select
+              id="download-select"
+              onChange={(e) => {
+                if (e.target.value === "pdf") downloadPDF();
+                if (e.target.value === "word") downloadWord();
+                e.target.value = ""; 
+              }}
+            >
+              <option value="">Select format</option>
+              <option value="pdf">PDF</option>
+              <option value="word">Word</option>
+            </select>
+          </div>
 
-        <button className="email-btn" onClick={sendTasksToEmail}>
-          📧 Send to Email
-        </button>
-      </div>
+          <button className="email-btn" onClick={sendTasksToEmail}>
+            📧 Send to Email
+          </button>
+        </div>
 
+        <div className="filters">
+          <select onChange={(e) => setStatusFilter(e.target.value)} value={statusFilter}>
+            <option value="">All Statuses</option>
+            <option value="Not Started">Not Started</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Completed">Completed</option>
+          </select>
 
-      <div className="filters">
-        <select onChange={(e) => setStatusFilter(e.target.value)} value={statusFilter}>
-          <option value="">All Statuses</option>
-          <option value="Not Started">Not Started</option>
-          <option value="In Progress">In Progress</option>
-          <option value="Completed">Completed</option>
-        </select>
+          <select onChange={(e) => setDueDateSort(e.target.value)} value={dueDateSort}>
+            <option value="">Due Date (Default)</option>
+            <option value="oldest">Due soon</option>
+            <option value="newest">Due later</option>
+          </select>
 
-        <select onChange={(e) => setDueDateSort(e.target.value)} value={dueDateSort}>
-          <option value="">Due Date (Default)</option>
-          <option value="oldest">Due soon</option>
-          <option value="newest">Due later</option>
-        </select>
+          <select onChange={(e) => setPriorityFilter(e.target.value)} value={priorityFilter}>
+            <option value="">All Priorities</option>
+            <option value="High">High</option>
+            <option value="Medium">Medium</option>
+            <option value="Low">Low</option>
+          </select>
+        </div>
+      </div> 
 
-        <select onChange={(e) => setPriorityFilter(e.target.value)} value={priorityFilter}>
-          <option value="">All Priorities</option>
-          <option value="High">High</option>
-          <option value="Medium">Medium</option>
-          <option value="Low">Low</option>
-        </select>
-      </div>
-
-      <table>
-        <thead>
-          <tr>
-            <th>Sr.No.</th>
-            <th>Task</th>
-            <th>Assigned Date</th>
-            <th>Due Date</th>
-            <th>Status</th>
-            <th>Priority</th>
-            {showAssignee && <th>Assignee</th>}
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredTasks.map((task, index) => (
-            <tr key={`${task.source}-${task.sr_no || index}`}>
-              <td>{index + 1}</td>
-              <td className="task-link">{task.task}</td>
-              <td>{moment(task.assigned_date).format("YYYY-MM-DD")}</td>
-              <td>{moment(task.due_date).format("YYYY-MM-DD")}</td>
-              <td>
-                <div className="dropdown-wrapper">
-                  <select
-                    value={task.status}
-                    onChange={(e) =>
-                      handleStatusChange(task.sr_no, e.target.value, task.source)
-                    }
-                    className={`status-dropdown ${task.status
-                      ?.toLowerCase()
-                      .replace(" ", "-")}`}
-                  >
-                    <option value="Not Started">Not Started</option>
-                    <option value="In Progress">In Progress</option>
-                    <option value="Completed">Completed</option>
-                  </select>
-                </div>
-              </td>
-              <td>
-                <span className={`badge ${task.priority?.toLowerCase()}`}>
-                  {task.priority}
-                </span>
-              </td>
-              {showAssignee && <td>{task.assignee_name || "N/A"}</td>}
-              <td>
-                {task.status === "Completed" && (
-                  <button
-                    className="delete-btn"
-                    onClick={() => handleDeleteTask(task.sr_no, task.source)}
-                  >
-                    Delete
-                  </button>
-                )}
-              </td>
+      <div className="table-wrapper"> 
+        <table>
+          <thead>
+            <tr>
+              <th>Sr.No.</th>
+              <th>Task</th>
+              <th>Assigned Date</th>
+              <th>Due Date</th>
+              <th>Status</th>
+              <th>Priority</th>
+              {showAssignee && <th>Assignee</th>}
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {currentEntries.length > 0 ? ( 
+              currentEntries.map((task, index) => (
+                <tr key={`${task.source}-${task.sr_no || index}`}>
+                  <td>{indexOfFirstEntry + index + 1}</td> 
+                  <td className="task-link">{task.task}</td>
+                  <td>{moment(task.assigned_date).format("YYYY-MM-DD")}</td>
+                  <td>{moment(task.due_date).format("YYYY-MM-DD")}</td>
+                  <td>
+                    <div className="dropdown-wrapper">
+                      <select
+                        value={task.status}
+                        onChange={(e) =>
+                          handleStatusChange(task.sr_no, e.target.value, task.source)
+                        }
+                        className={`status-dropdown ${task.status
+                          ?.toLowerCase()
+                          .replace(" ", "-")}`}
+                      >
+                        <option value="Not Started">Not Started</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Completed">Completed</option>
+                      </select>
+                    </div>
+                  </td>
+                  <td>
+                    <span className={`badge ${task.priority?.toLowerCase()}`}>
+                      {task.priority}
+                    </span>
+                  </td>
+                  {showAssignee && <td>{task.assignee_name || "N/A"}</td>}
+                  <td>
+                    {task.status === "Completed" && (
+                      <button
+                        className="delete-btn"
+                        onClick={() => handleDeleteTask(task.sr_no, task.source)}
+                      >
+                        Delete
+                      </button>
+                    )}
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={showAssignee ? 8 : 7} style={{ textAlign: "center" }}>
+                  No tasks found matching your criteria.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div> 
+
+      <div className="table-controls-bottom"> 
+        <ShowEntries
+          entriesPerPage={entriesPerPage}
+          onEntriesChange={handleEntriesPerPageChange}
+        />
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
+      </div> 
     </div>
   );
 };
 
 export default TasksTable;
-
